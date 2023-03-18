@@ -19,7 +19,7 @@ def home_index(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('app_book:dashboard')
     else:
         if request.method == 'POST':
             email = request.POST.get('email')
@@ -59,8 +59,12 @@ def registration_view(request):
             message = f'Hi, {new_form.name}. This is your OTP: {number}. Please, verify your account.'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [new_form.email, ]
-            send_mail("OTP From Test System", message,
-                      email_from, recipient_list)
+
+            try:
+                send_mail("OTP From Test System", message,
+                          email_from, recipient_list)
+            except:
+                print("Email is not valid!")
 
             messages.success(request, 'Account Created successfully !')
             return redirect('app_book:registration')
