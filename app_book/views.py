@@ -10,7 +10,7 @@ def home_index(request):
 
 
 def login_view(request):
-    return render(request, 'registration/login.html')
+    return render(request, 'auth/login.html')
 
 
 def registration_view(request):
@@ -26,7 +26,7 @@ def registration_view(request):
     context = {
         'form': form,
     }
-    return render(request, 'registration/registration.html', context)
+    return render(request, 'auth/registration.html', context)
 
 
 def dashboard_view(request):
