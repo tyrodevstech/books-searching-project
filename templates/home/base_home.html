@@ -54,13 +54,13 @@
                 <a class="nav-link" href="#"> About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Categories</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="#"> Blog </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Contact Us</a>
+              </li>
+              <li class="nav-item mr-2" style="background-color: rgb(27, 99, 81); border-radius:10px;">
+                <a class="nav-link" href="{% url 'app_book:login' %}">Login</a>
               </li>
             </ul>
             <from class="search_form">
@@ -91,10 +91,10 @@
                       Reading Needs
                     </h1>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
+                      One-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
                     </p>
-                    <a href="">
-                      Read More
+                    <a href="{% url 'app_book:registration' %}">
+                      Registration Now
                     </a>
                   </div>
                 </div>
@@ -119,10 +119,10 @@
                       Reading Needs
                     </h1>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
+                      Two-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
                     </p>
-                    <a href="">
-                      Read More
+                    <a href="{% url 'app_book:registration' %}">
+                      Registration Now
                     </a>
                   </div>
                 </div>
@@ -147,10 +147,10 @@
                       Reading Needs
                     </h1>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
+                      Three-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
                     </p>
-                    <a href="">
-                      Read More
+                    <a href="{% url 'app_book:registration' %}">
+                      Registration Now
                     </a>
                   </div>
                 </div>
@@ -269,7 +269,7 @@
     <div class="container">
       <p>
         &copy; <span id="displayYear"></span> All Rights Reserved By 
-        <a href="#">itsource</a>
+        <a href="#">Rakib Team</a>
       </p>
     </div>
   </footer>

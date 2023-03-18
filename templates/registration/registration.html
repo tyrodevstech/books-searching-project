@@ -1,0 +1,151 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+    <title>Registration | Books Searching Service</title>
+  </head>
+  <body>
+  
+
+  <div class="d-lg-flex half">
+    <div class="bg order-1 order-md-2" style="background-image: url('../../static/images/book-bg.jpg');"></div>
+    <div class="contents order-2 order-md-1">
+
+      <div class="container" style="background-color: rgb(29, 40, 51) !important;">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-7 py-5">
+            <h3 class="text-white">Register Form</h3>
+            <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
+            <form method="POST" enctype="multipart/form-data" class="text-white">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group first">
+                    <label for="email">Name</label>
+                    {{form.name}}
+                  </div>    
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group first">
+                    <label for="email">Email Address</label>
+                    {{form.email}}
+                    {{ form.email.errors }}
+                  </div>    
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group first">
+                    <label for="lname">Phone Number</label>
+                    {{form.phone}}
+                  </div>    
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group first">
+                    <label for="lname">Other Phone Number</label>
+                    {{form.other_phone}}
+                  </div>    
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group last mb-3">
+                    <label for="password">Password</label>
+                    {{form.password1}}
+                    {{ form.password1.errors }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group last mb-3">
+                    <label for="re-password">Confirm Password</label>
+                    {{form.password2}}
+                    {{ form.password2.errors }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group last mb-3">
+                    <label for="role_id">Select Role</label>
+                    {{form.role}}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group last mb-3">
+                    <label for="file_id">Choose file</label>
+                    <input type="file" id="file_id">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group first">
+                    <label for="email">Address</label>
+                    {{form.address}}
+                  </div>    
+                </div>
+              </div>
+              
+              <label class="mb-3 mt-4 mb-0"><span class="caption">If have an account than <a href="{% url 'app_book:login' %}">Login</a>.</span>
+              </label> <br>
+
+              <input type="submit" value="Register" class="btn px-5 btn-primary">
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == 'success' %}
+  <div id="msg_text" style="display:none;">{{ message }}</div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+    
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/registration.js' %}"></script>
+    <script src="{% static 'js/tata.js' %}"></script>
+
+    <script>
+      $('#id_password1').addClass('form-control').attr("placeholder", "Your Password");
+      $('#id_password2').addClass('form-control').attr("placeholder", "Your Confirm Password");
+      $('.errorlist').css("color", "red");
+    </script>
+
+    <script>
+      if ($('#msg_text').text() != '') {
+        tata.success('Notification', $('#msg_text').text(), {
+          position: 'tr',
+          duration: 10000
+        })
+      }
+    </script>
+  </body>
+</html>

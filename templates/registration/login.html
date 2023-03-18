@@ -1,0 +1,94 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+    <title>Registration | Books Searching Service</title>
+  </head>
+  <body>
+  
+
+  <div class="d-lg-flex half login-container">
+    <div class="bg order-1 order-md-2" style="background-image: url('../../static/images/book-bg.jpg');"></div>
+    <div class="contents order-2 order-md-1">
+
+      <div class="container" style="background-color: rgb(29, 40, 51) !important;">
+        <div class="row align-items-center justify-content-center login-container-row">
+          <div class="col-md-7 py-5">
+            <h3 class="text-white">Login Form</h3>
+            <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
+            <form method="POST" enctype="multipart/form-data" class="text-white">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group first">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                  </div>    
+                </div>
+              </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group first">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Your Password" required>
+                    </div>    
+                </div>
+            </div>
+   
+              <label class="mb-3 mt-4 mb-0"><span class="caption">If haven't an account than <a href="{% url 'app_book:registration' %}">Registration</a>.</span>
+              </label> <br>
+
+              <input type="submit" value="Login" class="btn px-5 btn-primary">
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == 'success' %}
+  <div id="msg_text" style="display:none;">{{ message }}</div>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+    
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/registration.js' %}"></script>
+    <script src="{% static 'js/tata.js' %}"></script>
+
+    <script>
+      $('.errorlist').css("color", "red");
+    </script>
+
+    <script>
+      if ($('#msg_text').text() != '') {
+        tata.success('Notification', $('#msg_text').text(), {
+          position: 'tr',
+          duration: 10000
+        })
+      }
+    </script>
+  </body>
+</html>
