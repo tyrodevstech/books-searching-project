@@ -38,6 +38,6 @@ class UserRegistrationForm(UserCreationForm):
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Phone', 'required': 'required'}),
             'other_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Other Phone'}),
             'role': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
-            'image': forms.ImageField(),
+            # 'image': forms.ImageField(),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': '4', 'cols': '40', 'placeholder': 'Your Address', 'style': 'height: 100px !important;', 'required': 'required'}),
         }

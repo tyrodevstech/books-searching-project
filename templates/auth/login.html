@@ -17,7 +17,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="{% static 'css/registration.css' %}">
 
-    <title>Registration | Books Searching Service</title>
+    <title>Login | Books Searching Service</title>
   </head>
   <body>
   
@@ -66,7 +66,7 @@
 
   {% if messages %}
   {% for message in messages %}
-  {% if message.tags == 'success' %}
+  {% if message.tags == 'error' %}
   <div id="msg_text" style="display:none;">{{ message }}</div>
   {% endif %}
   {% endfor %}
@@ -79,12 +79,8 @@
     <script src="{% static 'js/tata.js' %}"></script>
 
     <script>
-      $('.errorlist').css("color", "red");
-    </script>
-
-    <script>
       if ($('#msg_text').text() != '') {
-        tata.success('Notification', $('#msg_text').text(), {
+        tata.error('Notification', $('#msg_text').text(), {
           position: 'tr',
           duration: 10000
         })

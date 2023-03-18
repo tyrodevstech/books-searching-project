@@ -144,3 +144,21 @@ AUTH_USER_MODEL = "app_book.User"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# EMAIL_HOST = 'mail.efixbd.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'info@efixbd.com'
+# EMAIL_HOST_PASSWORD = 'Sq5=B&Bhe!ot'
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# DEFAULT_FROM_EMAIL = 'E-Fix <info@efixbd.com>'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'mdalaminislam.pro@gmail.com'
+EMAIL_HOST_PASSWORD = 'popdhotpgtymjrle'
+DEFAULT_FROM_EMAIL = 'mdalaminislam.pro@gmail.com'
