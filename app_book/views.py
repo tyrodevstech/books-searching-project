@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -77,4 +77,21 @@ def registration_view(request):
 
 @login_required(login_url='app_book:login')
 def dashboard_view(request):
-    return render(request, 'dashboard/dashboard.html')
+    if not request.user.is_verified:
+        user = get_object_or_404(User, id=request.user.id)
+
+        if request.method == 'POST':
+            otp = request.POST.get('otp')
+
+            if user.otp == otp:
+                user.is_verified = True
+                user.save()
+                return redirect('app_book:dashboard')
+            else:
+                print("Didn't Matched!")
+                messages.error(
+                    request, "OTP Didn't Matched!. Please try again!")
+
+        return render(request, 'dashboard/comfirm_account.html')
+    else:
+        return render(request, 'dashboard/dashboard.html')

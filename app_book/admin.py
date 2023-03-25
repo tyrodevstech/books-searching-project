@@ -35,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
             "image",
             "address",
             "location",
-            "active",
+            "is_verified",
         )}),
         ("Permissions", {"fields": (
             "is_staff",
@@ -57,7 +57,7 @@ class CustomUserAdmin(UserAdmin):
                 "image",
                 "address",
                 "location",
-                "active",
+                "is_verified",
                 "password1",
                 "password2",
                 "is_staff",

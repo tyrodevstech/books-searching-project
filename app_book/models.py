@@ -21,7 +21,8 @@ class User(AbstractUser):
         upload_to="profile_picture/%Y/%d/%b", null=True, blank=True)
     address = models.TextField(max_length=522, null=True, blank=True)
     location = models.CharField(max_length=999, null=True, blank=True)
-    active = models.BooleanField(default=False, null=True)
+    is_verified = models.BooleanField(default=False, null=True)
+
     date = models.DateField(auto_now_add=True)
 
     username = None
