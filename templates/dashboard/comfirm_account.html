@@ -75,6 +75,15 @@
                 padding: 20px;
             }
 
+            .link-tag{
+                text-decoration: none;
+                color: #45a049;
+            }
+
+            .link-tag:hover{
+                text-decoration: underline;
+            }
+
 		</style>
 	</head>
 
@@ -91,6 +100,8 @@
                   <input type="text" id="otp_id" name="otp" placeholder="Enter Your OTP">
                 
                   <input type="submit" value="Submit">
+
+                  <a href="{% url 'app_book:logout' %}" class="link-tag" role="menuitem">Don't want? log out</a>
                 </form>
 		    </div>
         </div>

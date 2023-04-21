@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from app_book.models import User
+from app_book.models import *
 from app_book.forms import CustomUserChangeForm, CustomUserCreationForm
 
 
@@ -72,3 +72,11 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(StockModel)
+admin.site.register(StoreModel)
+admin.site.register(ContactModel)
+admin.site.register(ReviewModel)
+admin.site.register(BookModel)
+admin.site.register(BookCategoryModel)
+admin.site.register(PublisherModel)
+admin.site.register(AuthorModel)

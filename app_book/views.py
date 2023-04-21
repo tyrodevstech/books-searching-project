@@ -8,10 +8,10 @@ from django.conf import settings
 import random
 
 from app_book.models import User
+from app_book.decorators import custom_dec
 
 
 # Create your views here.
-
 
 def home_index(request):
     return render(request, 'home/index.html')
@@ -76,6 +76,7 @@ def registration_view(request):
 
 
 @login_required(login_url='app_book:login')
+@custom_dec
 def dashboard_view(request):
     if not request.user.is_verified:
         user = get_object_or_404(User, id=request.user.id)
