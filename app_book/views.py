@@ -95,3 +95,8 @@ def dashboard_view(request):
         return render(request, 'dashboard/comfirm_account.html')
     else:
         return render(request, 'dashboard/dashboard.html')
+    
+
+@login_required(login_url='app_book:login')
+def update_profile_view(request):
+        return render(request, 'dashboard/update_profile.html')
