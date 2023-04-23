@@ -40,7 +40,8 @@ class User(AbstractUser):
 
 
 class StoreModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True)
+    user = models.OneToOneField(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=525, null=True, blank=True)
     phone = PhoneNumberField(null=False, blank=False, unique=True, region='BD')
     email = models.EmailField(null=True, blank=True, unique=True)
@@ -52,8 +53,12 @@ class StoreModel(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = ("Store")
+        verbose_name_plural = ("Stores")
+
     def __str__(self):
-        return f"Store Name: {self.name}"
+        return f"Store: {self.name}"
 
 
 class AuthorModel(models.Model):

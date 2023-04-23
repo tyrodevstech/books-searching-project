@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -7,8 +6,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 import random
 
-from app_book.models import User
+from app_book.models import User, StoreModel
 from app_book.decorators import custom_dec
+from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm, StoreForm
 
 
 # Create your views here.
@@ -76,7 +76,7 @@ def registration_view(request):
 
 
 @login_required(login_url='app_book:login')
-@custom_dec
+# @custom_dec
 def dashboard_view(request):
     if not request.user.is_verified:
         user = get_object_or_404(User, id=request.user.id)
@@ -96,8 +96,43 @@ def dashboard_view(request):
         return render(request, 'dashboard/comfirm_account.html')
     else:
         return render(request, 'dashboard/dashboard.html')
-    
+
 
 @login_required(login_url='app_book:login')
 def update_profile_view(request):
-        return render(request, 'dashboard/update_profile.html')
+    return render(request, 'dashboard/update_profile.html')
+
+
+@login_required(login_url='app_book:login')
+def store_view(request):
+    user = get_object_or_404(User, id=request.user.id)
+    has_instance = hasattr(request.user, 'storemodel')
+
+    if has_instance:
+        store_obj = get_object_or_404(StoreModel, user=user)
+        form = StoreForm(instance=store_obj)
+    else:
+        form = StoreForm()
+
+    if request.method == 'POST':
+        if has_instance:
+            form = StoreForm(request.POST, instance=store_obj)
+        else:
+            form = StoreForm(request.POST)
+
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = user
+            new_form.save()
+
+            if has_instance:
+                messages.success(request, 'Store Updated successfully !')
+            else:
+                messages.success(request, 'Store Created successfully !')
+
+            return redirect('app_book:add_store')
+
+    context = {
+        "form": form
+    }
+    return render(request, 'dashboard/store.html', context)

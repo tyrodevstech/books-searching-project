@@ -11,4 +11,5 @@ urlpatterns = [
     path("registration/", registration_view, name="registration"),
     path("dashboard/", dashboard_view, name="dashboard"),
     path("update-profile/", update_profile_view, name="update_profile"),
+    path("store/", store_view, name="store"),
 ]
