@@ -126,9 +126,10 @@ class ContactModel(models.Model):
 
 
 class ReviewModel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True)
     created_at = models.DateField(auto_now_add=True)
 
-    def _str_(self):
+    def __str__(self):
         return f'{self.created_at}'

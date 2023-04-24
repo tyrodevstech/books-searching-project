@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 import random
 
-from app_book.models import User, StoreModel
+from app_book.models import User, StoreModel, ReviewModel
 from app_book.decorators import custom_dec
-from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm, StoreForm
+from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm, StoreForm, ReviewForm
 
 
 # Create your views here.
@@ -136,3 +137,17 @@ def store_view(request):
         "form": form
     }
     return render(request, 'dashboard/store.html', context)
+
+
+class AddReview(CreateView):
+    model = ReviewModel
+    success_url = "/dashboard/"
+    form_class = ReviewForm
+    template_name = "dashboard/review.html"
+
+    def form_valid(self, form):
+        new_form = form.save(commit=False)
+        new_form.user = self.request.user
+        self.object = new_form.save()
+        messages.success(self.request, 'Review Added successfully !')
+        return super().form_valid(form)

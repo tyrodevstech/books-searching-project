@@ -12,4 +12,6 @@ urlpatterns = [
     path("dashboard/", dashboard_view, name="dashboard"),
     path("update-profile/", update_profile_view, name="update_profile"),
     path("store/", store_view, name="store"),
+
+    path("review/add/", AddReview.as_view(), name="add_review"),
 ]
