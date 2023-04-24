@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from app_book.models import User, StoreModel, ReviewModel
+from app_book.models import User, StoreModel, ReviewModel, ContactModel
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -65,7 +65,7 @@ class ReviewForm(forms.ModelForm):
         fields = "__all__"
 
         widgets = {
-            'comment': forms.Textarea(
+            'name': forms.TextInput(
                 attrs={
                     'class': 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                     'rows': '4',
@@ -73,4 +73,17 @@ class ReviewForm(forms.ModelForm):
                     'required': 'required'
                 }
             ),
+        }
+
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactModel
+        fields = "__all__"
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': '', 'placeholder': 'Name', 'required': 'required'}),
+            'email': forms.EmailInput(attrs={'class': '', 'placeholder': 'Email', 'required': 'required'}),
+            'phone': forms.TextInput(attrs={'class': '', 'placeholder': 'Phone', 'required': 'required'}),
+            'message': forms.TextInput(attrs={'class': 'message-box', 'placeholder': 'Leave a message...', 'required': 'required'}),
         }

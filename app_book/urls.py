@@ -14,4 +14,5 @@ urlpatterns = [
     path("store/", store_view, name="store"),
 
     path("review/add/", AddReview.as_view(), name="add_review"),
+    path("contact/", ContactView.as_view(), name="contact"),
 ]

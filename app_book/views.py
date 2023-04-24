@@ -7,9 +7,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 import random
 
-from app_book.models import User, StoreModel, ReviewModel
+from app_book.models import User, StoreModel, ReviewModel, ContactModel
 from app_book.decorators import custom_dec
-from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm, StoreForm, ReviewForm
+from app_book.forms import CustomUserCreationForm, UserRegistrationForm, CustomUserChangeForm, StoreForm, ReviewForm, ContactForm
 
 
 # Create your views here.
@@ -150,4 +150,16 @@ class AddReview(CreateView):
         new_form.user = self.request.user
         self.object = new_form.save()
         messages.success(self.request, 'Review Added successfully !')
+        return super().form_valid(form)
+
+
+class ContactView(CreateView):
+    model = ContactModel
+    success_url = "/contact/"
+    form_class = ContactForm
+    template_name = "home/contact.html"
+
+    def form_valid(self, form):
+        self.object = form.save()
+        messages.success(self.request, 'Message Sent successfully !')
         return super().form_valid(form)
