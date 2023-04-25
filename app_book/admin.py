@@ -78,7 +78,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(StockModel)
 admin.site.register(StoreModel)
 admin.site.register(ContactModel)
 admin.site.register(ReviewModel)

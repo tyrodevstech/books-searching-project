@@ -249,3 +249,12 @@ class ContactView(CreateView):
         self.object = form.save()
         messages.success(self.request, "Message Sent successfully !")
         return super().form_valid(form)
+
+
+class OrderBaseView(View):
+    model = BookModel
+    success_url = reverse_lazy("app_book:book_list")
+
+
+class OrderListView(OrderBaseView, ListView):
+    template_name = "dashboard/order/list.html"

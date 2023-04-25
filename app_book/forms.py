@@ -227,6 +227,7 @@ class BookForm(forms.ModelForm):
                     "rows": "8",
                 }
             ),
+            "cover_image": CustomImageFieldWidget,
         }
 
     def __init__(self, *args, **kwargs):

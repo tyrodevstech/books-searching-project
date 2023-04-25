@@ -86,7 +86,6 @@ class BookCategoryModel(models.Model):
 class BookModel(models.Model):
     title = models.CharField(max_length=225, null=True, blank=True)
     description = models.TextField(max_length=925, null=True, blank=True)
-    price = models.IntegerField(null=True, blank=True)
     cover_image = models.ImageField(
         upload_to="cover-image/%Y/%d/%b", null=True, blank=True
     )
@@ -99,25 +98,48 @@ class BookModel(models.Model):
     category = models.ForeignKey(
         BookCategoryModel, on_delete=models.SET_NULL, null=True, blank=True
     )
-
     publication_date = models.DateField(default=timezone.now)
+    price = models.FloatField(null=True, blank=True)
+    quantity = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.title}"
 
 
-class StockModel(models.Model):
-    store = models.ForeignKey(
-        StoreModel, on_delete=models.CASCADE, null=True, blank=True
+class OrderModel(models.Model):
+    ORDER_STATUS = (
+        ("Pending", "Pending"),
+        ("Complete", "Complete"),
+        ("Cancelled", "Cancelled"),
     )
-    book = models.ForeignKey(BookModel, on_delete=models.CASCADE, null=True, blank=True)
-    quantity = models.IntegerField(null=True, blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.store}-{self.book}"
+    customer = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="customer_orders",
+    )
+    order_status = models.CharField(
+        max_length=122, choices=ORDER_STATUS, null=True, default=ORDER_STATUS[0][0]
+    )
+    order_date = models.DateTimeField(auto_now_add=True)
+    book = models.ForeignKey(
+        BookModel, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    store = models.ForeignKey(
+        StoreModel, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    payment_method = models.CharField(max_length=100, null=True, blank=True)
+    transaction_id = models.CharField(max_length=100, null=True, blank=True)
+    seller = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="seller_orders",
+    )
+    is_paid = models.BooleanField(default=False)
 
 
 class ContactModel(models.Model):

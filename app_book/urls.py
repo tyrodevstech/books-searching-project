@@ -34,6 +34,12 @@ urlpatterns = [
         BookCategoryDeleteView.as_view(),
         name="book_category_delete",
     ),
+    # order
+    path(
+        "order/list/",
+        OrderListView.as_view(),
+        name="order_list",
+    ),
     path(
         "",
         home_index,
