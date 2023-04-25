@@ -37,6 +37,7 @@ DEFAULT_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
 ]
 
 PROJECT_APP = [
@@ -45,7 +46,7 @@ PROJECT_APP = [
 
 INSTALLED_APPS = DEFAULT_APPS + PROJECT_APP
 
-
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

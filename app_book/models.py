@@ -36,7 +36,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return f"#{self.id}: {self.email}"
+        return f"{self.email}"
 
 
 class StoreModel(models.Model):
@@ -53,46 +53,48 @@ class StoreModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Store Name: {self.name}"
+        return f"{self.name}"
 
 
 class AuthorModel(models.Model):
-    name = models.CharField(max_length=225, null=True, blank=True)
+    author_name = models.CharField(max_length=225, null=True, blank=True)
 
     def __str__(self):
-        return f"Store Name: {self.name}"
+        return f"{self.author_name}"
 
 
 class PublisherModel(models.Model):
     publisher_name = models.CharField(max_length=225, null=True, blank=True)
 
     def __str__(self):
-        return f"Store Name: {self.title}"
+        return f"{self.publisher_name}"
 
 
 class BookCategoryModel(models.Model):
     category_name = models.CharField(max_length=225, null=True, blank=True)
 
     def __str__(self):
-        return f"Category Name: {self.category_name}"
+        return f"{self.category_name}"
 
 
 class BookModel(models.Model):
     title = models.CharField(max_length=225, null=True, blank=True)
-    sub_title = models.CharField(max_length=525, null=True, blank=True)
-    description = models.CharField(max_length=925, null=True, blank=True)
+    description = models.TextField(max_length=925, null=True, blank=True)
+    price = models.IntegerField(null=True, blank=True)
     cover_image = models.ImageField(
         upload_to="cover-image/%Y/%d/%b", null=True, blank=True)
     author = models.ForeignKey(
         AuthorModel, on_delete=models.SET_NULL, null=True, blank=True)
     publisher = models.ForeignKey(
         PublisherModel, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        BookCategoryModel, on_delete=models.SET_NULL, null=True, blank=True)
 
     publication_date = models.DateField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Store Name: {self.title}"
+        return f"{self.title}"
 
 
 class StockModel(models.Model):
@@ -105,7 +107,7 @@ class StockModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Store Name: {self.id}"
+        return f"{self.store}-{self.book}"
 
 
 class ContactModel(models.Model):
@@ -117,7 +119,7 @@ class ContactModel(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"Consumer Name: {self.name}"
+        return f"{self.name}"
 
 
 class ReviewModel(models.Model):
