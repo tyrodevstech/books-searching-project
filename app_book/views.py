@@ -94,10 +94,10 @@ def registration_view(request):
                 new_form.email,
             ]
 
-            try:
-                send_mail("OTP From Test System", message, email_from, recipient_list)
-            except:
-                print("Email is not valid!")
+            # try:
+            #     send_mail("OTP From Test System", message, email_from, recipient_list)
+            # except:
+            #     print("Email is not valid!")
 
             messages.success(request, "Account Created successfully !")
             return redirect("app_book:registration")
@@ -138,27 +138,6 @@ class UserUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
-    # def get_form_kwargs(self):
-    #     print('test',self.request.user)
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs.update({'instance': self.request.user})
-    #     return kwargs
-    # def post(self, request, *args, **kwargs):
-    #     """
-    #     Handle POST requests: instantiate a form instance with the passed
-    #     POST variables and then check if it's valid.
-    #     """
-    #     form = self.get_form()
-    #     print(self.request.POST)
-
-    #     if form.is_valid():
-    #         print('form valid')
-    #         form.save()
-    #         return self.form_valid(form)
-    #     else:
-    #         print(form.errors)
-    #         return self.form_invalid(form)
 
 
 # Book
@@ -240,7 +219,7 @@ def store_view(request):
             else:
                 messages.success(request, "Store Created successfully !")
 
-            return redirect("app_book:add_store")
+            return redirect("app_book:store")
 
     context = {"form": form}
     return render(request, "dashboard/store.html", context)

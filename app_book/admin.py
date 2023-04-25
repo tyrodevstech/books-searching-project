@@ -24,48 +24,54 @@ class CustomUserAdmin(UserAdmin):
         "is_active",
     )
     fieldsets = (
-        (None, {"fields": (
-            "email",
-            "name",
-            "password",
-            "phone",
-            "other_phone",
-            "role",
-            "otp",
-            "image",
-            "address",
-            "location",
-            "is_verified",
-        )}),
-        ("Permissions", {"fields": (
-            "is_staff",
-            "is_active",
-            "groups",
-            "user_permissions"
-        )}),
+        (
+            None,
+            {
+                "fields": (
+                    "email",
+                    "name",
+                    "password",
+                    "phone",
+                    "other_phone",
+                    "role",
+                    "otp",
+                    "image",
+                    "address",
+                    "location",
+                    "is_verified",
+                )
+            },
+        ),
+        (
+            "Permissions",
+            {"fields": ("is_staff", "is_active", "groups", "user_permissions")},
+        ),
     )
     add_fieldsets = (
-        (None, {
-            "classes": ("wide",),
-            "fields": (
-                "email",
-                "name",
-                "phone",
-                "other_phone",
-                "role",
-                "otp",
-                "image",
-                "address",
-                "location",
-                "is_verified",
-                "password1",
-                "password2",
-                "is_staff",
-                "is_active",
-                "groups",
-                "user_permissions"
-            )}
-         ),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "name",
+                    "phone",
+                    "other_phone",
+                    "role",
+                    "otp",
+                    "image",
+                    "address",
+                    "location",
+                    "is_verified",
+                    "password1",
+                    "password2",
+                    "is_staff",
+                    "is_active",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
     )
     search_fields = ("email",)
     ordering = ("email",)

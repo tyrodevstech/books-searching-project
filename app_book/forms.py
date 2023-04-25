@@ -2,10 +2,15 @@ from django import forms
 from django.contrib.auth.forms import (
     UserCreationForm,
     UserChangeForm,
+)
+from app_book.models import (
+    User,
+    StoreModel,
+    BookModel,
+    BookCategoryModel,
     ReviewModel,
     ContactModel,
 )
-from app_book.models import User, StoreModel, BookModel, BookCategoryModel
 from django.utils.translation import gettext_lazy as _
 
 from django.forms.widgets import ClearableFileInput
@@ -15,7 +20,7 @@ class CustomImageFieldWidget(ClearableFileInput):
     clear_checkbox_label = _("Clear")
     initial_text = _("Currently")
     input_text = _("Change")
-    template_name = ("django/forms/widgets/custom_clearable_file_input.html",)
+    template_name = "django/forms/widgets/custom_clearable_file_input.html"
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -95,7 +100,6 @@ class UserRegistrationForm(UserCreationForm):
             "role": forms.Select(
                 attrs={"class": "form-control", "required": "required"}
             ),
-            # 'image': forms.ImageField(),
             "address": forms.Textarea(
                 attrs={
                     "class": "form-control",

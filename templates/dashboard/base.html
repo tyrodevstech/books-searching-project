@@ -14,9 +14,6 @@
 </head>
 
 <body class="h-[calc(100%-4rem)] md:h-[calc(100%-3.5rem)] mt-16 md:mt-14">
-
-
-
    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
          <div class="flex items-center justify-between">
@@ -102,11 +99,49 @@
                </a>
             </li>
             <li>
-               <a href="#"
+               <a href="{% url 'app_book:update_profile' %}"
                   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                  <svg aria-hidden="true"
-                     class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon icon-tabler icon-tabler-user-edit flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                     <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5"></path>
+                     <path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z"></path>
+                  </svg>
+                  <span class="flex-1 ml-3 whitespace-nowrap">Update Profile</span>
+               </a>
+            </li>
+            <li>
+               <a href="{% url 'app_book:store' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon icon-tabler icon-tabler-building-store flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M3 21l18 0"></path>
+                     <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"></path>
+                     <path d="M5 21l0 -10.15"></path>
+                     <path d="M19 21l0 -10.15"></path>
+                     <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"></path>
+                  </svg>
+                  <span class="flex-1 ml-3 whitespace-nowrap">Store</span>
+               </a>
+            </li>
+            <li>
+               <a href="{% url 'app_book:book_list' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon icon-tabler icon-tabler-books flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                     <path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path>
+                     <path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path>
+                     <path d="M5 8h4"></path>
+                     <path d="M9 16h4"></path>
                      <path
                         d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z">
                      </path>
@@ -195,7 +230,6 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Review</span>
                </a>
             </li>
-
          </ul>
       </div>
    </aside>
