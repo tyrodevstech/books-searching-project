@@ -1,12 +1,4 @@
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
-from app_book.forms import (
-    CustomUserCreationForm,
-    UserRegistrationForm,
-    CustomUserChangeForm,
-    UserUpdateForm,
-    BookForm,
-    BookCategoryForm,
-)
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, CreateView
@@ -23,15 +15,22 @@ from app_book.models import (
     StoreModel,
     ReviewModel,
     ContactModel,
+    AuthorModel,
+    PublisherModel,
 )
 from app_book.decorators import custom_dec
 from app_book.forms import (
     CustomUserCreationForm,
     UserRegistrationForm,
     CustomUserChangeForm,
+    UserUpdateForm,
+    BookForm,
+    BookCategoryForm,
     StoreForm,
     ReviewForm,
     ContactForm,
+    BookAuthorForm,
+    BookPublisherForm,
 )
 
 
@@ -190,6 +189,54 @@ class BookCategoryUpdateView(BookCategoryBaseView, UpdateView):
 
 class BookCategoryDeleteView(BookCategoryBaseView, DeleteView):
     template_name = "dashboard/category/delete.html"
+
+
+# Author
+class BookAuthorBaseView(View):
+    model = AuthorModel
+    success_url = reverse_lazy("app_book:book_author_list")
+
+
+class BookAuthorListView(BookAuthorBaseView, ListView):
+    template_name = "dashboard/author/list.html"
+
+
+class BookAuthorCreateView(BookAuthorBaseView, CreateView):
+    template_name = "dashboard/author/create.html"
+    form_class = BookAuthorForm
+
+
+class BookAuthorUpdateView(BookAuthorBaseView, UpdateView):
+    template_name = "dashboard/author/edit.html"
+    form_class = BookAuthorForm
+
+
+class BookAuthorDeleteView(BookAuthorBaseView, DeleteView):
+    template_name = "dashboard/author/delete.html"
+
+
+# Publisher
+class BookPublisherBaseView(View):
+    model = PublisherModel
+    success_url = reverse_lazy("app_book:book_publisher_list")
+
+
+class BookPublisherListView(BookPublisherBaseView, ListView):
+    template_name = "dashboard/publisher/list.html"
+
+
+class BookPublisherCreateView(BookPublisherBaseView, CreateView):
+    template_name = "dashboard/publisher/create.html"
+    form_class = BookPublisherForm
+
+
+class BookPublisherUpdateView(BookPublisherBaseView, UpdateView):
+    template_name = "dashboard/publisher/edit.html"
+    form_class = BookPublisherForm
+
+
+class BookPublisherDeleteView(BookPublisherBaseView, DeleteView):
+    template_name = "dashboard/publisher/delete.html"
 
 
 @login_required(login_url="app_book:login")

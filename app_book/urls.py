@@ -34,6 +34,44 @@ urlpatterns = [
         BookCategoryDeleteView.as_view(),
         name="book_category_delete",
     ),
+    # book author
+    path("book-author/list/", BookAuthorListView.as_view(), name="book_author_list"),
+    path(
+        "book-author/create/",
+        BookAuthorCreateView.as_view(),
+        name="book_author_create",
+    ),
+    path(
+        "book-author/edit/<int:pk>/",
+        BookAuthorUpdateView.as_view(),
+        name="book_author_edit",
+    ),
+    path(
+        "book-author/delete/<int:pk>/",
+        BookAuthorDeleteView.as_view(),
+        name="book_author_delete",
+    ),
+    # book publisher
+    path(
+        "book-publisher/list/",
+        BookPublisherListView.as_view(),
+        name="book_publisher_list",
+    ),
+    path(
+        "book-publisher/create/",
+        BookPublisherCreateView.as_view(),
+        name="book_publisher_create",
+    ),
+    path(
+        "book-publisher/edit/<int:pk>/",
+        BookPublisherUpdateView.as_view(),
+        name="book_publisher_edit",
+    ),
+    path(
+        "book-publisher/delete/<int:pk>/",
+        BookPublisherDeleteView.as_view(),
+        name="book_publisher_delete",
+    ),
     # order
     path(
         "order/list/",
@@ -46,6 +84,6 @@ urlpatterns = [
         name="home",
     ),
     path("store/", store_view, name="store"),
-    path("review/add/", AddReview.as_view(), name="add_review"),
+    path("review/add/", AddReview.as_view(), name="review"),
     path("contact/", ContactView.as_view(), name="contact"),
 ]

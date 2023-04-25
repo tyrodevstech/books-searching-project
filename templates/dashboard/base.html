@@ -14,13 +14,13 @@
 </head>
 
 <body class="h-[calc(100%-4rem)] md:h-[calc(100%-3.5rem)] mt-16 md:mt-14">
-   <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+   <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 ">
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
          <div class="flex items-center justify-between">
             <div class="flex items-center justify-start">
                <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
                   type="button"
-                  class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                  class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 ">
                   <span class="sr-only">Open sidebar</span>
                   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                      xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +39,7 @@
                <div class="flex items-center ml-3">
                   <div>
                      <button type="button"
-                        class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                        class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 "
                         aria-expanded="false" data-dropdown-toggle="dropdown-user">
                         <span class="sr-only">Open user menu</span>
                         <img class="w-8 h-8 rounded-full"
@@ -47,28 +47,26 @@
                            alt="user photo">
                      </button>
                   </div>
-                  <div
-                     class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                  <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow "
                      id="dropdown-user">
                      <div class="px-4 py-3" role="none">
-                        <p class="text-sm text-gray-900 dark:text-white" role="none">
+                        <p class="text-sm text-gray-900 " role="none">
                            {{request.user.name}}
                         </p>
-                        <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                        <p class="text-sm font-medium text-gray-900 truncate " role="none">
                            {{request.user.email}}
                         </p>
                      </div>
                      <ul class="py-1" role="none">
                         <li>
-                           <a href="#"
-                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
                               role="menuitem">Dashboard</a>
                         </li>
 
                         <li>
                            <a href="{% url 'app_book:logout' %}"
-                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                              role="menuitem">Log out</a>
+                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 " role="menuitem">Log
+                              out</a>
                         </li>
                      </ul>
                   </div>
@@ -79,15 +77,15 @@
    </nav>
 
    <aside id="logo-sidebar"
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 "
       aria-label="Sidebar">
-      <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+      <div class="h-full px-3 pb-4 overflow-y-auto bg-white ">
          <ul class="space-y-2 font-medium">
             <li>
                <a href="{% url 'app_book:dashboard' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-home flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-home flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -100,9 +98,9 @@
             </li>
             <li>
                <a href="{% url 'app_book:update_profile' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-user-edit flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-user-edit flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -115,9 +113,9 @@
             </li>
             <li>
                <a href="{% url 'app_book:store' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-building-store flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-building-store flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -132,9 +130,9 @@
             </li>
             <li>
                <a href="{% url 'app_book:book_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-books flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-books flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -153,9 +151,9 @@
             </li>
             <li>
                <a href="{% url 'app_book:book_category_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-category  flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-category  flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -168,10 +166,10 @@
                </a>
             </li>
             <li>
-               <a href="{% url 'app_book:book_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               <a href="{% url 'app_book:book_author_list' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-writing flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-writing flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -183,10 +181,10 @@
                </a>
             </li>
             <li>
-               <a href="{% url 'app_book:book_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               <a href="{% url 'app_book:book_publisher_list' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-brand-telegram flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-brand-telegram flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -199,7 +197,7 @@
                <a href="{% url 'app_book:order_list' %}"
                   class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-shopping-cart  flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-shopping-cart  flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -212,10 +210,10 @@
                </a>
             </li>
             <li>
-               <a href=""
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               <a href="{% url 'app_book:review' %}"
+                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
                   <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-message-star flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                     class="icon icon-tabler icon-tabler-message-star flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                      stroke-linecap="round" stroke-linejoin="round">
                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -234,7 +232,7 @@
       </div>
    </aside>
 
-   <main class="sm:ml-64 h-full bg-white dark:bg-gray-900 ">
+   <main class="sm:ml-64 h-full bg-white  ">
       {% block main_content %} {% endblock main_content %}
    </main>
 
