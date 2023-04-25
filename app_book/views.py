@@ -9,14 +9,30 @@ from app_book.forms import (
 )
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 import random
 from django.http import Http404
 
-from app_book.models import User, BookModel, BookCategoryModel
+from app_book.models import (
+    User,
+    BookModel,
+    BookCategoryModel,
+    StoreModel,
+    ReviewModel,
+    ContactModel,
+)
 from app_book.decorators import custom_dec
+from app_book.forms import (
+    CustomUserCreationForm,
+    UserRegistrationForm,
+    CustomUserChangeForm,
+    StoreForm,
+    ReviewForm,
+    ContactForm,
+)
 
 
 from django.views import View
@@ -119,8 +135,10 @@ class UserUpdateView(UpdateView):
     form_class = UserUpdateForm
     template_name = "dashboard/update_profile.html"
     success_url = reverse_lazy("app_book:update_profile")
+
     def get_object(self, queryset=None):
         return self.request.user
+
     # def get_form_kwargs(self):
     #     print('test',self.request.user)
     #     kwargs = super().get_form_kwargs()
@@ -193,3 +211,62 @@ class BookCategoryUpdateView(BookCategoryBaseView, UpdateView):
 
 class BookCategoryDeleteView(BookCategoryBaseView, DeleteView):
     template_name = "dashboard/category/delete.html"
+
+
+@login_required(login_url="app_book:login")
+def store_view(request):
+    user = get_object_or_404(User, id=request.user.id)
+    has_instance = hasattr(request.user, "storemodel")
+
+    if has_instance:
+        store_obj = get_object_or_404(StoreModel, user=user)
+        form = StoreForm(instance=store_obj)
+    else:
+        form = StoreForm()
+
+    if request.method == "POST":
+        if has_instance:
+            form = StoreForm(request.POST, instance=store_obj)
+        else:
+            form = StoreForm(request.POST)
+
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = user
+            new_form.save()
+
+            if has_instance:
+                messages.success(request, "Store Updated successfully !")
+            else:
+                messages.success(request, "Store Created successfully !")
+
+            return redirect("app_book:add_store")
+
+    context = {"form": form}
+    return render(request, "dashboard/store.html", context)
+
+
+class AddReview(CreateView):
+    model = ReviewModel
+    success_url = "/dashboard/"
+    form_class = ReviewForm
+    template_name = "dashboard/review.html"
+
+    def form_valid(self, form):
+        new_form = form.save(commit=False)
+        new_form.user = self.request.user
+        self.object = new_form.save()
+        messages.success(self.request, "Review Added successfully !")
+        return super().form_valid(form)
+
+
+class ContactView(CreateView):
+    model = ContactModel
+    success_url = "/contact/"
+    form_class = ContactForm
+    template_name = "home/contact.html"
+
+    def form_valid(self, form):
+        self.object = form.save()
+        messages.success(self.request, "Message Sent successfully !")
+        return super().form_valid(form)

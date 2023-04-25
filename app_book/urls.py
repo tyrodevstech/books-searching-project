@@ -16,10 +16,30 @@ urlpatterns = [
     path("book/details/<int:pk>/", BookDetailView.as_view(), name="book_details"),
     path("book/delete/<int:pk>/", BookDeleteView.as_view(), name="book_delete"),
     # book category
-    path("book-category/list/", BookCategoryListView.as_view(), name="book_category_list"),
-    path("book-category/create/", BookCategoryCreateView.as_view(), name="book_category_create"),
-    path("book-category/edit/<int:pk>/", BookCategoryUpdateView.as_view(), name="book_category_edit"),
-    path("book-category/delete/<int:pk>/", BookCategoryDeleteView.as_view(), name="book_category_delete"),
-
-    path("", home_index, name="home",),
+    path(
+        "book-category/list/", BookCategoryListView.as_view(), name="book_category_list"
+    ),
+    path(
+        "book-category/create/",
+        BookCategoryCreateView.as_view(),
+        name="book_category_create",
+    ),
+    path(
+        "book-category/edit/<int:pk>/",
+        BookCategoryUpdateView.as_view(),
+        name="book_category_edit",
+    ),
+    path(
+        "book-category/delete/<int:pk>/",
+        BookCategoryDeleteView.as_view(),
+        name="book_category_delete",
+    ),
+    path(
+        "",
+        home_index,
+        name="home",
+    ),
+    path("store/", store_view, name="store"),
+    path("review/add/", AddReview.as_view(), name="add_review"),
+    path("contact/", ContactView.as_view(), name="contact"),
 ]
