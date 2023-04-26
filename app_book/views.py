@@ -299,6 +299,14 @@ class ContactView(CreateView):
         return super().form_valid(form)
 
 
+def search_book(request):
+    search_text = request.POST.get("book_search")
+
+    print(search_text)
+
+    return HttpResponse("Test Page!")
+
+
 class OrderBaseView(View):
     model = BookModel
     success_url = reverse_lazy("app_book:book_list")
