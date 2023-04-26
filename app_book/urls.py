@@ -87,3 +87,7 @@ urlpatterns = [
     path("review/add/", AddReview.as_view(), name="review"),
     path("contact/", ContactView.as_view(), name="contact"),
 ]
+
+
+htmx_urlpatters = [path("hx-search-list", search_list_view, name="hx_search_list")]
+urlpatterns += htmx_urlpatters

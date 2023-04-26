@@ -126,7 +126,7 @@ def dashboard_view(request):
 
         return render(request, "dashboard/comfirm_account.html")
     else:
-        return render(request, "dashboard/dashboard.html")
+        return render(request, "dashboard/dashboard copy.html")
 
 
 class UserUpdateView(UpdateView):
@@ -305,3 +305,9 @@ class OrderBaseView(View):
 
 class OrderListView(OrderBaseView, ListView):
     template_name = "dashboard/order/list.html"
+
+
+
+def search_list_view(request):
+    print(request.POST)
+    return render(request,'partials/search_list.html')
