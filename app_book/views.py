@@ -296,3 +296,11 @@ class ContactView(CreateView):
         self.object = form.save()
         messages.success(self.request, "Message Sent successfully !")
         return super().form_valid(form)
+
+
+def search_book(request):
+    search_text = request.POST.get("book_search")
+
+    print(search_text)
+
+    return HttpResponse("Test Page!")
