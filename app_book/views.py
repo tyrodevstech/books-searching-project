@@ -157,6 +157,24 @@ class BookDetailView(BookBaseView, DetailView):
 class BookCreateView(BookBaseView, CreateView):
     template_name = "dashboard/book/create.html"
     form_class = BookForm
+    def post(self, request, *args, **kwargs):
+        has_store = hasattr(request.user, "store")
+        form = self.get_form()
+        if has_store:
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+        else:
+            messages.success(request, "Create Store first!!")
+            return redirect('app_book:store')
+        
+
+    def form_valid(self, form):
+        new_form = form.save(commit=False)
+        new_form.store = self.request.user.store
+        self.object = new_form.save()
+        return super().form_valid(form)
 
 
 class BookUpdateView(BookBaseView, UpdateView):
@@ -243,7 +261,7 @@ class BookPublisherDeleteView(BookPublisherBaseView, DeleteView):
 @login_required(login_url="app_book:login")
 def store_view(request):
     user = get_object_or_404(User, id=request.user.id)
-    has_instance = hasattr(request.user, "storemodel")
+    has_instance = hasattr(request.user, "store")
 
     if has_instance:
         store_obj = get_object_or_404(StoreModel, user=user)
@@ -299,14 +317,6 @@ class ContactView(CreateView):
         return super().form_valid(form)
 
 
-def search_book(request):
-    search_text = request.POST.get("book_search")
-
-    print(search_text)
-
-    return HttpResponse("Test Page!")
-
-
 class OrderBaseView(View):
     model = OrderModel
     success_url = reverse_lazy("app_book:order_list")
@@ -352,6 +362,11 @@ def search_list_view(request):
 
 def search_details_view(request, pk):
     book = get_object_or_404(BookModel, id=pk)
+    if request.method == "POST":
+        order = OrderModel.objects.create(
+            book=book, store=book.store, customer=request.user, seller=book.store.user
+        )
+        return redirect("app_book:order_list")
     context = {
         "book": book,
     }

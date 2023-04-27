@@ -21,43 +21,82 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.description}}</dd>
             </dl>
-            <dl class="flex items-center space-x-6">
+            <div class="flex gap-8 mt-6">
                 <div>
-                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Category</dt>
-                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-                        {{book.category.category_name}}</dd>
+                    <dl class="flex items-center space-x-6">
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Category</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
+                                {{book.category.category_name}}</dd>
+                        </div>
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Author</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
+                                {{book.author.author_name}}
+                            </dd>
+                        </div>
+                    </dl>
+                    <dl class="flex items-center space-x-6">
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Publisher</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
+                                {{book.publisher.publisher_name}}</dd>
+                        </div>
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Publication Date
+                            </dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
+                                {{book.publication_date}}
+                            </dd>
+                        </div>
+                    </dl>
                 </div>
                 <div>
-                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Author</dt>
-                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.author.author_name}}
-                    </dd>
+                    <dl class="flex items-center space-x-6">
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Store</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.store.name}}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Store Address</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.store.street}}
+                                {{book.store.city}}-{{book.store.zip_code}}
+                            </dd>
+                        </div>
+                    </dl>
+                    <dl class="flex items-center space-x-6">
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Store Email</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.store.email}}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Store Phone</dt>
+                            <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.store.phone}}
+                            </dd>
+                        </div>
+                    </dl>
                 </div>
-            </dl>
-            <dl class="flex items-center space-x-6">
-                <div>
-                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Publisher</dt>
-                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-                        {{book.publisher.publisher_name}}</dd>
-                </div>
-                <div>
-                    <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Publication Date</dt>
-                    <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{book.publication_date}}
-                    </dd>
-                </div>
-            </dl>
-            <div class="flex items-center space-x-4">
-                <a href="#" type="button"
+            </div>
+
+            <form class="flex items-center" method="post">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('Are you sure?')"
                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 -ml-1 w-5 h-5 icon icon-tabler icon-tabler-shopping-cart"  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="mr-1 -ml-1 w-5 h-5 icon icon-tabler icon-tabler-shopping-cart" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                         <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                         <path d="M17 17h-11v-14h-2"></path>
                         <path d="M6 5l14 1l-1 7h-13"></path>
-                     </svg>
+                    </svg>
                     Order Now
-                </a>
-            </div>
+                </button>
+            </form>
         </div>
     </div>
 </section>

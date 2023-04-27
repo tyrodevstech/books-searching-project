@@ -49,7 +49,6 @@ class UserUpdateForm(UserChangeForm):
             "other_phone",
             "image",
             "address",
-            "location",
         )
 
         widgets = {

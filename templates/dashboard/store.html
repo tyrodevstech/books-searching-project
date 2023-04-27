@@ -1,7 +1,19 @@
 {% extends 'dashboard/base.html' %}
 {% load static %}
+<!-- Map Style, Links and Js Files -->
+{% block head_css %}
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+<link rel='stylesheet'
+    href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css'
+    type='text/css' />
+{% endblock head_css %}
+{% block head_js %}
+<script src='https://unpkg.com/@turf/turf/turf.min.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'>
+</script>
+{% endblock head_js %}
 {% block title %}Store | Update Profile {% endblock title %}
-
 
 {% block main_content %}
 <!-- class="bg-white max-w-4xl mx-auto" -->
@@ -49,6 +61,17 @@
                     {{ form.street }}
                     {{ form.street.errors }}
                 </div>
+                <!-- Extra Map Work Start -->
+                <div class="sm:col-span-2">
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Select Location</label>
+
+                    <div id='map' class=" aspect-[19/6] rounded-md"></div>
+                    {{form.location}}
+                    <div class="name text-end mt-4"><button type="button"
+                            class="text-white ml-auto bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center locate-btn"
+                            onclick="getCurrentLocFunc()">Locate Me</button>
+                    </div>
+                </div>
             </div>
             <div class="flex items-center space-x-4">
                 <button type="submit"
@@ -60,10 +83,105 @@
     </div>
 </section>
 {% endblock main_content %}
-
-
 {% block script %}
+<!-- Map JS Start -->
 <script>
-    document.querySelector(".errorlist").style.color = "#ff0000";
+    mapboxgl.accessToken =
+        'pk.eyJ1Ijoic3JhYmJpIiwiYSI6ImNrcG96cXhkcjAyaHAyb2s5MGZib3JydGMifQ.VvzeD_NW9jIYo3kjT2ANdw';
+    let previous_Marker
+    let locOptions = {
+        maximumAge: 10000,
+        timeout: 5000,
+        enableHighAccuracy: true
+    };
+    let locInpField = null
+
+
+    let map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        zoom: 15,
+    });
+
+    let geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        marker: true,
+        placeholder: 'Search for places ...',
+
+    });
+
+    map.addControl(geocoder);
+
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    function getCurrentLocFunc() {
+        let clat, clong
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                clat = position.coords.latitude
+                clng = position.coords.longitude
+                if (locInpField)
+                    locInpField.value = `${clat},${clng}`;
+                if (previous_Marker) {
+                    previous_Marker.remove()
+                }
+                let marker = new mapboxgl.Marker({
+                    color: 'red',
+                    scale: 1.00,
+                })
+                    .setLngLat([clng, clat])
+                    .addTo(map);
+                previous_Marker = marker
+                map.flyTo({
+                    center: [clng, clat]
+                });
+            }, error, locOptions);
+
+
+        } else {
+            alert("Sorry, your browser does not support HTML5 geolocation.");
+        }
+    }
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.GeolocateControl({}));
 </script>
+<script>
+    locInpField = document.querySelector('#id_location')
+    locInpField.setAttribute("type", "hidden");
+    map.on('load', function () {
+        map.on('click', function (e) {
+            if (previous_Marker) {
+                console.log(previous_Marker)
+                previous_Marker.remove()
+            }
+            locInpField.value = `${e.lngLat.lat},${e.lngLat.lng}`;
+            let marker = new mapboxgl.Marker({
+                color: 'green',
+                scale: 0.9
+            })
+                .setLngLat([e.lngLat.lng, e.lngLat.lat])
+                .addTo(map);
+            previous_Marker = marker
+
+        });
+        if (locInpField.value) {
+            tloc = locInpField.value.split(',').reverse()
+            let marker = new mapboxgl.Marker({
+                color: 'red',
+                scale: 0.9
+            })
+                .setLngLat(tloc)
+                .addTo(map);
+            previous_Marker = marker
+            map.flyTo({
+                center: tloc,
+            });
+        } else
+            getCurrentLocFunc()
+    })
+</script>
+<!-- Map JS End -->
 {% endblock script %}

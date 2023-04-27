@@ -26,7 +26,6 @@ class User(AbstractUser):
         upload_to="profile_picture/%Y/%d/%b", null=True, blank=True
     )
     address = models.TextField(max_length=522, null=True, blank=True)
-    location = models.CharField(max_length=999, null=True, blank=True)
     is_verified = models.BooleanField(default=False, null=True)
 
     date = models.DateField(auto_now_add=True)
@@ -42,7 +41,7 @@ class User(AbstractUser):
 
 
 class StoreModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True,related_name='store')
     name = models.CharField(max_length=525, null=True, blank=True)
     phone = PhoneNumberField(null=False, blank=False, unique=True, region="BD")
     email = models.EmailField(null=True, blank=True, unique=True)
@@ -50,7 +49,7 @@ class StoreModel(models.Model):
     city = models.CharField(max_length=100, null=True, blank=True)
     zip_code = models.IntegerField(null=True, blank=True)
     licence = models.CharField(max_length=100, null=True, blank=True)
-
+    location = models.CharField(max_length=999, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -84,6 +83,9 @@ class BookCategoryModel(models.Model):
 
 
 class BookModel(models.Model):
+    store = models.ForeignKey(
+        StoreModel, on_delete=models.SET_NULL, null=True, blank=True
+    )
     title = models.CharField(max_length=225, null=True, blank=True)
     description = models.TextField(max_length=925, null=True, blank=True)
     cover_image = models.ImageField(
@@ -100,7 +102,6 @@ class BookModel(models.Model):
     )
     publication_date = models.DateField(default=timezone.now)
     price = models.FloatField(null=True, blank=True)
-    quantity = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
