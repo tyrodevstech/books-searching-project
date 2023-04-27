@@ -5,6 +5,7 @@ from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Q
 import random
 from django.http import Http404
 
@@ -298,25 +299,60 @@ class ContactView(CreateView):
         return super().form_valid(form)
 
 
+def search_book(request):
+    search_text = request.POST.get("book_search")
+
+    print(search_text)
+
+    return HttpResponse("Test Page!")
+
+
 class OrderBaseView(View):
     model = OrderModel
     success_url = reverse_lazy("app_book:order_list")
 
+
 class OrderListView(OrderBaseView, ListView):
     template_name = "dashboard/order/list.html"
+
 
 class OrderUpdateView(OrderBaseView, UpdateView):
     template_name = "dashboard/order/edit.html"
     form_class = OrderForm
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['customer'] = self.get_object().customer.email
+        context["customer"] = self.get_object().customer.email
         return context
+
 
 class OrderDeleteView(OrderBaseView, DeleteView):
     template_name = "dashboard/order/delete.html"
 
 
 def search_list_view(request):
+    search_text = request.POST.get("query")
+
     print(request.POST)
-    return render(request, "partials/search_list.html")
+
+    if search_text:
+        results = BookModel.objects.filter(
+            Q(title__icontains=search_text)
+            | Q(author__author_name__icontains=search_text)
+            | Q(publisher__publisher_name__icontains=search_text)
+        )
+
+        context = {
+            "results": results,
+        }
+        return render(request, "partials/search_list.html", context)
+    else:
+        return HttpResponse("")
+
+
+def search_details_view(request, pk):
+    book = get_object_or_404(BookModel, id=pk)
+    context = {
+        "book": book,
+    }
+    return render(request, "dashboard/search_details.html", context)

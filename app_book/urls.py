@@ -96,8 +96,12 @@ urlpatterns = [
     path("store/", store_view, name="store"),
     path("review/add/", AddReview.as_view(), name="review"),
     path("contact/", ContactView.as_view(), name="contact"),
+    path("api/test/", search_book, name="test"),
 ]
 
 
-htmx_urlpatters = [path("hx-search-list", search_list_view, name="hx_search_list")]
+htmx_urlpatters = [
+    path("hx-search-list", search_list_view, name="hx_search_list"),
+    path("search-details/<int:pk>", search_details_view, name="search_details"),
+]
 urlpatterns += htmx_urlpatters

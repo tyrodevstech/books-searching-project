@@ -25,8 +25,8 @@
                </svg>
             </div>
             <input name="query" type="text" id="voice-search" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-               hx-vals='js:{location: getUserLocation()}' hx-target="#search-results"
-               hx-post="{% url 'app_book:hx_search_list' %}" hx-trigger="keyup changed delay:500ms"
+               hx-target="#search-results" hx-post="{% url 'app_book:hx_search_list' %}"
+               hx-trigger="keyup changed delay:500ms" hx-vals='js:{"location": getUserLocation()}'
                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full !pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                placeholder="Search Books by Title, Author, Publisher..." required>
             <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -121,3 +121,25 @@
    }
 </script>
 {% endblock main_content %}
+
+{% block script %}
+
+<script>
+   function getlocation() {
+      userLocation = ''
+      if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(async (position) => {
+            let lat = position.coords.latitude;
+            let long = position.coords.longitude;
+            userLocation = `${lat},${long}`;
+         });
+      }
+   }
+   window.addEventListener("DOMContentLoaded", async (event) => {
+      getlocation()
+   });
+
+   function getUserLocation() { return userLocation }
+</script>
+
+{% endblock script %}
