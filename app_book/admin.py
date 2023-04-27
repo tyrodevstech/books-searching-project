@@ -37,7 +37,6 @@ class CustomUserAdmin(UserAdmin):
                     "otp",
                     "image",
                     "address",
-                    "location",
                     "is_verified",
                 )
             },
@@ -61,7 +60,6 @@ class CustomUserAdmin(UserAdmin):
                     "otp",
                     "image",
                     "address",
-                    "location",
                     "is_verified",
                     "password1",
                     "password2",

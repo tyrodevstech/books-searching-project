@@ -43,7 +43,7 @@ class User(AbstractUser):
 class StoreModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True,related_name='store')
     name = models.CharField(max_length=525, null=True, blank=True)
-    phone = PhoneNumberField(null=False, blank=False, unique=True, region="BD")
+    phone = PhoneNumberField(null=False, blank=False, unique=True)
     email = models.EmailField(null=True, blank=True, unique=True)
     street = models.TextField(max_length=525, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -84,7 +84,7 @@ class BookCategoryModel(models.Model):
 
 class BookModel(models.Model):
     store = models.ForeignKey(
-        StoreModel, on_delete=models.SET_NULL, null=True, blank=True
+        StoreModel, on_delete=models.SET_NULL, null=True, blank=True,related_name='store_set'
     )
     title = models.CharField(max_length=225, null=True, blank=True)
     description = models.TextField(max_length=925, null=True, blank=True)
@@ -92,13 +92,13 @@ class BookModel(models.Model):
         upload_to="cover-image/%Y/%d/%b", null=True, blank=True
     )
     author = models.ForeignKey(
-        AuthorModel, on_delete=models.SET_NULL, null=True, blank=True
+        AuthorModel, on_delete=models.SET_NULL, null=True, blank=True,related_name='author_set'
     )
     publisher = models.ForeignKey(
         PublisherModel, on_delete=models.SET_NULL, null=True, blank=True
     )
     category = models.ForeignKey(
-        BookCategoryModel, on_delete=models.SET_NULL, null=True, blank=True
+        BookCategoryModel, on_delete=models.SET_NULL, null=True, blank=True,related_name='category_set'
     )
     publication_date = models.DateField(default=timezone.now)
     price = models.FloatField(null=True, blank=True)

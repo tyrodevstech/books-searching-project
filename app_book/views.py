@@ -1,45 +1,47 @@
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+import random
+
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, CreateView
-from django.contrib import messages
+from django.core.cache import cache
 from django.core.mail import send_mail
-from django.conf import settings
 from django.db.models import Q
-import random
-from django.http import Http404
+from django.http import Http404, HttpResponse
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import CreateView, TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
+from django.views.generic.list import ListView
 
-from app_book.models import (
-    User,
-    BookModel,
-    BookCategoryModel,
-    StoreModel,
-    ReviewModel,
-    ContactModel,
-    AuthorModel,
-    PublisherModel,
-    OrderModel,
-)
 from app_book.decorators import custom_dec
 from app_book.forms import (
+    BookAuthorForm,
+    BookCategoryForm,
+    BookForm,
+    BookPublisherForm,
+    ContactForm,
+    OrderForm,
+    ReviewForm,
+    StoreForm,
     UserRegistrationForm,
     UserUpdateForm,
-    BookForm,
-    BookCategoryForm,
-    StoreForm,
-    ReviewForm,
-    ContactForm,
-    BookAuthorForm,
-    BookPublisherForm,
-    OrderForm,
+)
+from app_book.models import (
+    AuthorModel,
+    BookCategoryModel,
+    BookModel,
+    ContactModel,
+    OrderModel,
+    PublisherModel,
+    ReviewModel,
+    StoreModel,
+    User,
 )
 
-
-from django.views import View
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, FormView, DeleteView
-from django.urls import reverse_lazy
+from .utils import getSortedBooksLocations
 
 # Create your views here.
 
@@ -149,6 +151,10 @@ class BookBaseView(View):
 class BookListView(BookBaseView, ListView):
     template_name = "dashboard/book/list.html"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(store__user=self.request.user)
+
 
 class BookDetailView(BookBaseView, DetailView):
     template_name = "dashboard/book/details.html"
@@ -157,6 +163,7 @@ class BookDetailView(BookBaseView, DetailView):
 class BookCreateView(BookBaseView, CreateView):
     template_name = "dashboard/book/create.html"
     form_class = BookForm
+
     def post(self, request, *args, **kwargs):
         has_store = hasattr(request.user, "store")
         form = self.get_form()
@@ -167,8 +174,7 @@ class BookCreateView(BookBaseView, CreateView):
                 return self.form_invalid(form)
         else:
             messages.success(request, "Create Store first!!")
-            return redirect('app_book:store')
-        
+            return redirect("app_book:store")
 
     def form_valid(self, form):
         new_form = form.save(commit=False)
@@ -180,6 +186,25 @@ class BookCreateView(BookBaseView, CreateView):
 class BookUpdateView(BookBaseView, UpdateView):
     template_name = "dashboard/book/edit.html"
     form_class = BookForm
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        has_store = hasattr(request.user, "store")
+        if has_store:
+            if form.is_valid():
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+        else:
+            messages.success(request, "Create Store first!!")
+            return redirect("app_book:store")
+
+    def form_valid(self, form):
+        new_form = form.save(commit=False)
+        new_form.store = self.request.user.store
+        self.object = new_form.save()
+        return super().form_valid(form)
 
 
 class BookDeleteView(BookBaseView, DeleteView):
@@ -324,6 +349,17 @@ class OrderBaseView(View):
 
 class OrderListView(OrderBaseView, ListView):
     template_name = "dashboard/order/list.html"
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role == 'Shop Owner':
+            return queryset.filter(seller=self.request.user)
+        elif self.request.user.role == 'User':
+            return queryset.filter(customer=self.request.user)
+        else:
+            return queryset
+
+
 
 
 class OrderUpdateView(OrderBaseView, UpdateView):
@@ -342,18 +378,20 @@ class OrderDeleteView(OrderBaseView, DeleteView):
 
 def search_list_view(request):
     search_text = request.POST.get("query")
-
-    print(request.POST)
+    user_location = request.POST.get("location")
 
     if search_text:
         results = BookModel.objects.filter(
             Q(title__icontains=search_text)
             | Q(author__author_name__icontains=search_text)
             | Q(publisher__publisher_name__icontains=search_text)
-        )
+            | Q(category__category_name__icontains=search_text)
+        ).select_related("store", "author")[:10]
+        # Sort results based on user location
+        sorted_books = getSortedBooksLocations(user_location, results)
 
         context = {
-            "results": results,
+            "sorted_books": sorted_books,
         }
         return render(request, "partials/search_list.html", context)
     else:

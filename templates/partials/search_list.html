@@ -1,7 +1,7 @@
-{% if results %}
+{% if sorted_books %}
 <h3 class="mt-2 text-sm">Search Results:</h3>
 <ul class="w-full mt-2 bg-white rounded p-2 border border-gray-200 shadow-sm">
-    {% for book in results %}
+    {% for book in sorted_books %}
     <a href="{% url 'app_book:search_details' book.id %}"
         class="pl-8 pr-2 flex justify-between items-center bg-white py-2 rounded relative cursor-pointer hover:bg-gray-50 hover:text-gray-900 border-b last:border-b-0 mb-2 last:mb-0">
         <div>
@@ -12,9 +12,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <b>{{ book.title }}</b> - written by "{{book.author.author_name}}"
+            <b>{{ book.title }}</b> - by "{{book.author}}" ({{book.category}})
         </div>
-        <span class="inline-block bg-blue-500 text-white rounded-md px-2 py-1 text-xs font-semibold">0.1
+        <span class="inline-block bg-blue-500 text-white rounded-md px-2 py-1 text-xs font-semibold">{{book.distance}}
             km</span>
     </a>
     {% endfor %}

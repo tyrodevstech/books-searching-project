@@ -94,6 +94,10 @@
       </div>
    </div>
 </div>
+
+{% endblock main_content %}
+
+{% block script %}
 <script>
    function getlocation() {
       userLocation = ''
@@ -120,26 +124,4 @@
       document.getElementById('my-modal').classList.add('hidden');
    }
 </script>
-{% endblock main_content %}
-
-{% block script %}
-
-<script>
-   function getlocation() {
-      userLocation = ''
-      if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition(async (position) => {
-            let lat = position.coords.latitude;
-            let long = position.coords.longitude;
-            userLocation = `${lat},${long}`;
-         });
-      }
-   }
-   window.addEventListener("DOMContentLoaded", async (event) => {
-      getlocation()
-   });
-
-   function getUserLocation() { return userLocation }
-</script>
-
 {% endblock script %}
