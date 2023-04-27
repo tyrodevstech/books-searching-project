@@ -25,8 +25,8 @@
                </svg>
             </div>
             <input name="query" type="text" id="voice-search" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-               hx-target="#search-results" hx-post="{% url 'app_book:hx_search_list' %}"
-               hx-trigger="keyup changed delay:500ms"
+               hx-vals='js:{location: getUserLocation()}' hx-target="#search-results"
+               hx-post="{% url 'app_book:hx_search_list' %}" hx-trigger="keyup changed delay:500ms"
                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full !pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                placeholder="Search Books by Title, Author, Publisher..." required>
             <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -56,4 +56,68 @@
          nearest location.</p>
    </div>
 </section>
+
+<div class="absolute z-10 inset-0 -top-16 md:-top-14 hidden" id="my-modal">
+   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 relative">
+      <div class="absolute inset-0 transition-opacity" aria-hidden="true">
+         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div
+         class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+         role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+         <div>
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+               <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+               </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-5">
+               <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
+                  Error
+               </h3>
+               <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                     Geolocation is not enabled. Please enable to use this feature
+                  </p>
+               </div>
+            </div>
+         </div>
+         <div class="mt-5 sm:mt-6 text-center">
+            <button
+               class="w-36 mx-auto rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm"
+               onclick="closeModal()">
+               OK
+            </button>
+         </div>
+      </div>
+   </div>
+</div>
+<script>
+   function getlocation() {
+      userLocation = ''
+      if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition((position) => {
+            let lat = position.coords.latitude;
+            let long = position.coords.longitude;
+            userLocation = `${lat},${long}`;
+         }, positionError);
+      }
+   }
+   function positionError(error) {
+      // if (error.PERMISSION_DENIED) alert("Please accept geolocation")
+      document.getElementById('my-modal').classList.remove('hidden');
+   }
+
+   window.addEventListener("DOMContentLoaded", async (event) => {
+      getlocation()
+   });
+
+   function getUserLocation() { return userLocation }
+
+   function closeModal() {
+      document.getElementById('my-modal').classList.add('hidden');
+   }
+</script>
 {% endblock main_content %}

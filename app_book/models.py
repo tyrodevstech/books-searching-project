@@ -123,7 +123,6 @@ class OrderModel(models.Model):
     order_status = models.CharField(
         max_length=122, choices=ORDER_STATUS, null=True, default=ORDER_STATUS[0][0]
     )
-    order_date = models.DateTimeField(auto_now_add=True)
     book = models.ForeignKey(
         BookModel, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -140,6 +139,10 @@ class OrderModel(models.Model):
         related_name="seller_orders",
     )
     is_paid = models.BooleanField(default=False)
+    order_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order-#{self.id}"
 
 
 class ContactModel(models.Model):

@@ -17,12 +17,11 @@ from app_book.models import (
     ContactModel,
     AuthorModel,
     PublisherModel,
+    OrderModel,
 )
 from app_book.decorators import custom_dec
 from app_book.forms import (
-    CustomUserCreationForm,
     UserRegistrationForm,
-    CustomUserChangeForm,
     UserUpdateForm,
     BookForm,
     BookCategoryForm,
@@ -31,6 +30,7 @@ from app_book.forms import (
     ContactForm,
     BookAuthorForm,
     BookPublisherForm,
+    OrderForm,
 )
 
 
@@ -299,15 +299,24 @@ class ContactView(CreateView):
 
 
 class OrderBaseView(View):
-    model = BookModel
-    success_url = reverse_lazy("app_book:book_list")
-
+    model = OrderModel
+    success_url = reverse_lazy("app_book:order_list")
 
 class OrderListView(OrderBaseView, ListView):
     template_name = "dashboard/order/list.html"
 
+class OrderUpdateView(OrderBaseView, UpdateView):
+    template_name = "dashboard/order/edit.html"
+    form_class = OrderForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['customer'] = self.get_object().customer.email
+        return context
+
+class OrderDeleteView(OrderBaseView, DeleteView):
+    template_name = "dashboard/order/delete.html"
 
 
 def search_list_view(request):
     print(request.POST)
-    return render(request,'partials/search_list.html')
+    return render(request, "partials/search_list.html")

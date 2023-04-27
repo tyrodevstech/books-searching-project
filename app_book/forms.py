@@ -12,6 +12,7 @@ from app_book.models import (
     ContactModel,
     AuthorModel,
     PublisherModel,
+    OrderModel,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -237,6 +238,12 @@ class BookForm(forms.ModelForm):
         self.fields["category"].empty_label = "Select Category"
         self.fields["author"].empty_label = "Select Author"
         self.fields["publisher"].empty_label = "Select Publisher"
+
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = OrderModel
+        fields = ["order_status", "is_paid", "book", "payment_method", "transaction_id"]
 
 
 class BookCategoryForm(forms.ModelForm):

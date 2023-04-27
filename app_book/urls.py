@@ -79,6 +79,16 @@ urlpatterns = [
         name="order_list",
     ),
     path(
+        "order/edit/<int:pk>/",
+        OrderUpdateView.as_view(),
+        name="order_edit",
+    ),
+    path(
+        "order/delete/<int:pk>/",
+        OrderDeleteView.as_view(),
+        name="order_delete",
+    ),
+    path(
         "",
         home_index,
         name="home",
