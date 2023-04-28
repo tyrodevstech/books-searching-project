@@ -15,8 +15,9 @@ from django.views.generic import CreateView, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 
-from app_book.decorators import custom_dec
+from app_book.decorators import user_decorator, seller_decorator
 from app_book.forms import (
     BookAuthorForm,
     BookCategoryForm,
@@ -44,6 +45,8 @@ from app_book.models import (
 from .utils import getSortedBooksLocations
 
 # Create your views here.
+seller_decorators = [login_required(login_url="app_book:login"), seller_decorator]
+user_decorators = [login_required(login_url="app_book:login"), user_decorator]
 
 class Home(FormView):
     template_name = 'home/index.html'
@@ -119,7 +122,6 @@ def registration_view(request):
 
 
 @login_required(login_url="app_book:login")
-# @custom_dec
 def dashboard_view(request):
     if not request.user.is_verified:
         user = get_object_or_404(User, id=request.user.id)
@@ -137,7 +139,22 @@ def dashboard_view(request):
 
         return render(request, "dashboard/comfirm_account.html")
     else:
-        return render(request, "dashboard/dashboard copy.html")
+        if request.user.role == "User":
+            return render(request, "dashboard/user_dashboard.html")
+        else:
+            total_review = ReviewModel.objects.all().count()
+            total_added_books = BookModel.objects.filter(
+                store__user=request.user
+            ).count()
+
+            reviews = ReviewModel.objects.all().order_by("-id")[:5]
+
+            context = {
+                "total_review": total_review,
+                "total_added_books": total_added_books,
+                "reviews": reviews,
+            }
+            return render(request, "dashboard/seller_dashboard.html", context)
 
 
 class UserUpdateView(UpdateView):
@@ -156,6 +173,7 @@ class BookBaseView(View):
     success_url = reverse_lazy("app_book:book_list")
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookListView(BookBaseView, ListView):
     template_name = "dashboard/book/list.html"
 
@@ -164,10 +182,12 @@ class BookListView(BookBaseView, ListView):
         return queryset.filter(store__user=self.request.user)
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookDetailView(BookBaseView, DetailView):
     template_name = "dashboard/book/details.html"
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookCreateView(BookBaseView, CreateView):
     template_name = "dashboard/book/create.html"
     form_class = BookForm
@@ -191,6 +211,7 @@ class BookCreateView(BookBaseView, CreateView):
         return super().form_valid(form)
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookUpdateView(BookBaseView, UpdateView):
     template_name = "dashboard/book/edit.html"
     form_class = BookForm
@@ -215,6 +236,7 @@ class BookUpdateView(BookBaseView, UpdateView):
         return super().form_valid(form)
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookDeleteView(BookBaseView, DeleteView):
     template_name = "dashboard/book/delete.html"
 
@@ -229,16 +251,19 @@ class BookCategoryListView(BookCategoryBaseView, ListView):
     template_name = "dashboard/category/list.html"
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookCategoryCreateView(BookCategoryBaseView, CreateView):
     template_name = "dashboard/category/create.html"
     form_class = BookCategoryForm
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookCategoryUpdateView(BookCategoryBaseView, UpdateView):
     template_name = "dashboard/category/edit.html"
     form_class = BookCategoryForm
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookCategoryDeleteView(BookCategoryBaseView, DeleteView):
     template_name = "dashboard/category/delete.html"
 
@@ -249,20 +274,24 @@ class BookAuthorBaseView(View):
     success_url = reverse_lazy("app_book:book_author_list")
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookAuthorListView(BookAuthorBaseView, ListView):
     template_name = "dashboard/author/list.html"
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookAuthorCreateView(BookAuthorBaseView, CreateView):
     template_name = "dashboard/author/create.html"
     form_class = BookAuthorForm
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookAuthorUpdateView(BookAuthorBaseView, UpdateView):
     template_name = "dashboard/author/edit.html"
     form_class = BookAuthorForm
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookAuthorDeleteView(BookAuthorBaseView, DeleteView):
     template_name = "dashboard/author/delete.html"
 
@@ -273,25 +302,30 @@ class BookPublisherBaseView(View):
     success_url = reverse_lazy("app_book:book_publisher_list")
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookPublisherListView(BookPublisherBaseView, ListView):
     template_name = "dashboard/publisher/list.html"
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookPublisherCreateView(BookPublisherBaseView, CreateView):
     template_name = "dashboard/publisher/create.html"
     form_class = BookPublisherForm
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookPublisherUpdateView(BookPublisherBaseView, UpdateView):
     template_name = "dashboard/publisher/edit.html"
     form_class = BookPublisherForm
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class BookPublisherDeleteView(BookPublisherBaseView, DeleteView):
     template_name = "dashboard/publisher/delete.html"
 
 
 @login_required(login_url="app_book:login")
+@seller_decorator
 def store_view(request):
     user = get_object_or_404(User, id=request.user.id)
     has_instance = hasattr(request.user, "store")
@@ -324,6 +358,7 @@ def store_view(request):
     return render(request, "dashboard/store.html", context)
 
 
+@method_decorator(user_decorators, name="dispatch")
 class AddReview(CreateView):
     model = ReviewModel
     success_url = "/dashboard/"
@@ -357,19 +392,18 @@ class OrderBaseView(View):
 
 class OrderListView(OrderBaseView, ListView):
     template_name = "dashboard/order/list.html"
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.role == 'Shop Owner':
+        if self.request.user.role == "Shop Owner":
             return queryset.filter(seller=self.request.user)
-        elif self.request.user.role == 'User':
+        elif self.request.user.role == "User":
             return queryset.filter(customer=self.request.user)
         else:
             return queryset
 
 
-
-
+@method_decorator(seller_decorators, name="dispatch")
 class OrderUpdateView(OrderBaseView, UpdateView):
     template_name = "dashboard/order/edit.html"
     form_class = OrderForm
@@ -380,10 +414,13 @@ class OrderUpdateView(OrderBaseView, UpdateView):
         return context
 
 
+@method_decorator(seller_decorators, name="dispatch")
 class OrderDeleteView(OrderBaseView, DeleteView):
     template_name = "dashboard/order/delete.html"
 
 
+@login_required(login_url="app_book:login")
+@user_decorator
 def search_list_view(request):
     search_text = request.POST.get("query")
     user_location = request.POST.get("location")
@@ -406,6 +443,8 @@ def search_list_view(request):
         return HttpResponse("")
 
 
+@login_required(login_url="app_book:login")
+@user_decorator
 def search_details_view(request, pk):
     book = get_object_or_404(BookModel, id=pk)
     if request.method == "POST":
@@ -417,3 +456,7 @@ def search_details_view(request, pk):
         "book": book,
     }
     return render(request, "dashboard/search_details.html", context)
+
+
+def custom_page_not_found_view(request, exception=None):
+    return render(request, "404.html", {})

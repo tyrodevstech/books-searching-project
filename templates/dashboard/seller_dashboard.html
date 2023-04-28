@@ -1,0 +1,154 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %}Dashboard | {% endblock title %}
+
+
+{% block main_content %}
+<div class="px-4 pt-6">
+   <div class="grid w-full grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+      <div
+         class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+         <div class="w-full">
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Review</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ total_review }}</span>
+         </div>
+      </div>
+      
+      <div
+         class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+         <div class="w-full">
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Added Books</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ total_added_books }}</span>
+         </div>
+      </div>
+
+   </div>
+
+   <div class="grid grid-cols-1 my-4 xl:grid-cols-2 xl:gap-4">
+      <div
+         class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 dark:border-gray-700 dark:bg-gray-800 xl:mb-0">
+         <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">User Reviews</h3>
+            <a href="#"
+               class="inline-flex items-center p-2 text-sm font-medium rounded-lg text-primary-700 hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700">
+               View all
+            </a>
+         </div>
+
+         <!-- Chat -->
+         <div class="overflow-y-auto lg:max-h-[60rem] 2xl:max-h-fit">
+            {% if reviews %}
+            {% for review in reviews %}
+            <article class="mb-5">
+               <footer class="flex items-center justify-between mb-2">
+                  <div class="flex items-center">
+                     <p class="inline-flex items-center mr-3 text-sm font-semibold text-gray-900 dark:text-white"><img
+                           class="w-6 h-6 mr-2 rounded-full"
+                           src="{% if review.user.image %}{{ review.user.image.url }}{% else %}https://flowbite.com/docs/images/people/profile-picture-5.jpg{% endif %}"
+                           alt="image">
+                        {{ review.user.name }}
+                     </p>
+                     <p class="text-sm text-gray-600 dark:text-gray-400">{{ review.created_at|date:"M d, Y" }}</p>
+                  </div>
+                  <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
+                     class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:ring-gray-600"
+                     type="button">
+                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                           d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
+                        </path>
+                     </svg>
+                  </button>
+               </footer>
+               <p class="mb-2 text-gray-900 dark:text-white">
+                  <a href="#"
+                     class="font-medium hover:underline text-primary-600 dark:text-primary-500">@{{ review.user.name }} </a>
+                     {{ review.comment }}
+               </p>
+               <p class="mb-3 text-gray-900 dark:text-white">#by using books search sercice...</p>
+            </article>
+            {% endfor %}
+
+            {% else %}
+            <article class="mb-5">
+               <p class="text-gray-900 dark:text-white">No content are available!</p>
+            </article>
+            {% endif %}
+
+         </div>
+      </div>
+
+      <!-- Right Content -->
+      <div class="grid gap-4">
+
+         <div
+            class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
+               <div>
+                  <span class="text-xl font-bold text-gray-900 dark:text-gray-400">Seller Reports</span>
+               </div>
+               <a href="#"
+                  class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700">
+                  Full report
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+               </a>
+            </div>
+            <div id="traffic-by-device"></div>
+            <!-- Card Footer -->
+            <div class="flex items-center justify-between pt-4 lg:justify-evenly sm:pt-6">
+               <div>
+                  <h4 class="text-xl font-bold dark:text-white">
+                     234k
+                  </h4>
+                  <p class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                     <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
+                        4%
+                     </span>
+                     vs last month
+                  </p>
+               </div>
+               <div>
+                  <h4 class="text-xl font-bold dark:text-white">
+                     94k
+                  </h4>
+                  <p class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                     <span class="flex items-center mr-1.5 text-sm text-red-600 dark:text-red-500">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                           aria-hidden="true">
+                           <path clip-rule="evenodd" fill-rule="evenodd"
+                              d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z">
+                           </path>
+                        </svg>
+                        1%
+                     </span>
+                     vs last month
+                  </p>
+               </div>
+               <div>
+                  <h4 class="text-xl font-bold dark:text-white">
+                     16k
+                  </h4>
+                  <p class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                     <span class="flex items-center mr-1.5 text-sm text-red-600 dark:text-red-500">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+                           aria-hidden="true">
+                           <path clip-rule="evenodd" fill-rule="evenodd"
+                              d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z">
+                           </path>
+                        </svg>
+                        0,6%
+                     </span>
+                     vs last month
+                  </p>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+</div>
+{% endblock main_content %}
