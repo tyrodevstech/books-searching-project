@@ -41,7 +41,9 @@ class User(AbstractUser):
 
 
 class StoreModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True,related_name='store')
+    user = models.OneToOneField(
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="store"
+    )
     name = models.CharField(max_length=525, null=True, blank=True)
     phone = PhoneNumberField(null=False, blank=False, unique=True)
     email = models.EmailField(null=True, blank=True, unique=True)
@@ -64,12 +66,20 @@ class StoreModel(models.Model):
 class AuthorModel(models.Model):
     author_name = models.CharField(max_length=225, null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Author"
+        verbose_name_plural = "Authors"
+
     def __str__(self):
         return f"{self.author_name}"
 
 
 class PublisherModel(models.Model):
     publisher_name = models.CharField(max_length=225, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Publisher"
+        verbose_name_plural = "Publishers"
 
     def __str__(self):
         return f"{self.publisher_name}"
@@ -78,13 +88,21 @@ class PublisherModel(models.Model):
 class BookCategoryModel(models.Model):
     category_name = models.CharField(max_length=225, null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Book Category"
+        verbose_name_plural = "Book Categories"
+
     def __str__(self):
         return f"{self.category_name}"
 
 
 class BookModel(models.Model):
     store = models.ForeignKey(
-        StoreModel, on_delete=models.SET_NULL, null=True, blank=True,related_name='store_set'
+        StoreModel,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="store_set",
     )
     title = models.CharField(max_length=225, null=True, blank=True)
     description = models.TextField(max_length=925, null=True, blank=True)
@@ -92,17 +110,29 @@ class BookModel(models.Model):
         upload_to="cover-image/%Y/%d/%b", null=True, blank=True
     )
     author = models.ForeignKey(
-        AuthorModel, on_delete=models.SET_NULL, null=True, blank=True,related_name='author_set'
+        AuthorModel,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="author_set",
     )
     publisher = models.ForeignKey(
         PublisherModel, on_delete=models.SET_NULL, null=True, blank=True
     )
     category = models.ForeignKey(
-        BookCategoryModel, on_delete=models.SET_NULL, null=True, blank=True,related_name='category_set'
+        BookCategoryModel,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="category_set",
     )
     publication_date = models.DateField(default=timezone.now)
     price = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
 
     def __str__(self):
         return f"{self.title}"
@@ -142,6 +172,10 @@ class OrderModel(models.Model):
     is_paid = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
+
     def __str__(self):
         return f"Order-#{self.id}"
 
@@ -154,6 +188,10 @@ class ContactModel(models.Model):
 
     date = models.DateField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = "Contact"
+        verbose_name_plural = "Contacts"
+
     def __str__(self):
         return f"{self.name}"
 
@@ -162,6 +200,10 @@ class ReviewModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     comment = models.CharField(max_length=500, null=True)
     created_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Review"
+        verbose_name_plural = "Reviews"
 
     def __str__(self):
         return f"{self.created_at}"

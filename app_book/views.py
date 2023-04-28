@@ -134,7 +134,19 @@ def dashboard_view(request):
         if request.user.role == "User":
             return render(request, "dashboard/user_dashboard.html")
         else:
-            return render(request, "dashboard/seller_dashboard.html")
+            total_review = ReviewModel.objects.all().count()
+            total_added_books = BookModel.objects.filter(
+                store__user=request.user
+            ).count()
+
+            reviews = ReviewModel.objects.all().order_by("-id")[:5]
+
+            context = {
+                "total_review": total_review,
+                "total_added_books": total_added_books,
+                "reviews": reviews,
+            }
+            return render(request, "dashboard/seller_dashboard.html", context)
 
 
 class UserUpdateView(UpdateView):

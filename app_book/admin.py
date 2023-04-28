@@ -5,6 +5,9 @@ from app_book.models import *
 from app_book.forms import CustomUserChangeForm, CustomUserCreationForm
 
 
+admin.site.site_header = "Book Search Services"
+
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
