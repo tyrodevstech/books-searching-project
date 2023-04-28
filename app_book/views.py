@@ -45,9 +45,17 @@ from .utils import getSortedBooksLocations
 
 # Create your views here.
 
+class Home(FormView):
+    template_name = 'home/index.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('app_book:home')
+    def form_valid(self, form):
+        self.object = form.save()
+        messages.success(self.request, "Message Sent successfully !")
+        return super().form_valid(form)
 
-def home_index(request):
-    return render(request, "home/index.html")
+# def home_index(request):
+#     return render(request, "home/index.html")
 
 
 def login_view(request):

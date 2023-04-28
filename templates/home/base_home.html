@@ -33,15 +33,17 @@
   <div class="hero_area" style="min-height: 0px;">
     <!-- header section strats -->
     <header class="header_section">
-      <div class="container-fluid">
+      <div class="container">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="/">
+          <a class="navbar-brand" href="/" style="display: flex;justify-content: flex-start;align-items: center; gap: 0.5rem;">
+            <img src="{% static 'images/icon.png' %}" alt="" style="width: 44px;">
             <span>
-              Books Searching Service
+              BSS
             </span>
           </a>
 
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class=""> </span>
           </button>
 
@@ -51,30 +53,28 @@
                 <a class="nav-link pl-lg-0" href="/">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#"> About</a>
+                <a class="nav-link" href="#about-section"> About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#"> Blog </a>
+                <a class="nav-link" href="#blog-section"> Blog </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'app_book:contact' %}">Contact Us</a>
+                <a class="nav-link" href="#contact-section">Contact Us</a>
               </li>
               <li class="nav-item mr-2" style="background-color: rgb(27, 99, 81); border-radius:10px;">
+                {% if request.user.is_authenticated %}
+                <a class="nav-link" href="{% url 'app_book:login' %}">Dashboard</a>
+                {% else %}
                 <a class="nav-link" href="{% url 'app_book:login' %}">Login</a>
+                {% endif %}
               </li>
             </ul>
-            <from class="search_form">
-              <input type="text" class="form-control" placeholder="Search here...">
-              <button class="" type="submit">
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </button>
-            </from>
           </div>
         </nav>
       </div>
     </header>
     <!-- end header section -->
-    
+
   </div>
 
 
@@ -92,7 +92,8 @@
               About Us
             </h4>
             <p>
-              Vitae aut explicabo fugit facere alias distinctio, exem commodi mollitia minusem dignissimos atque asperiores incidunt vel voluptate iste
+              Vitae aut explicabo fugit facere alias distinctio, exem commodi mollitia minusem dignissimos atque
+              asperiores incidunt vel voluptate iste
             </p>
             <div class="info_social">
               <a href="">
@@ -143,19 +144,21 @@
               Newsletter
             </h4>
             <form action="#">
-              <input type="text" placeholder="Enter email" />
-              <button type="submit">
+              <input type="text" placeholder="Enter email" class="" />
+              <button type="submit" class="submit-btn">
                 Subscribe
               </button>
             </form>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 info-col">
-          <div class="map_container">
-            <div class="map">
-              <div id="googleMap"></div>
-            </div>
-          </div>
+          <h4>
+            Location
+          </h4>
+          <div style="width: 100%"><iframe width="100%" frameborder="0" scrolling="no" marginheight="0" style="border-radius: 5px;"
+              marginwidth="0"
+              src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=1%20Grafton%20Street,%20Dublin,%20Ireland+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a
+                href="https://www.maps.ie/distance-area-calculator.html">distance maps</a></iframe></div>
         </div>
       </div>
     </div>
@@ -167,7 +170,7 @@
   <footer class="footer_section">
     <div class="container">
       <p>
-        &copy; <span id="displayYear"></span> All Rights Reserved By 
+        &copy; <span id="displayYear"></span> All Rights Reserved By
         <a href="#">Rakib Team</a>
       </p>
     </div>
@@ -188,19 +191,15 @@
   <script src="{% static 'js/bootstrap.js' %}"></script>
   <!-- custom js -->
   <script src="{% static 'js/custom.js ' %}"></script>
-  <!-- Google Map -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
-  </script>
-  <!-- End Google Map -->
-  
+
   <script src="{% static 'js/tata.js' %}"></script>
 
   <script>
     if ($('#msg_text').text() != '') {
-        tata.success('Notification', $('#msg_text').text(), {
-          position: 'tr',
-          duration: 10000
-        })
+      tata.success('Notification', $('#msg_text').text(), {
+        position: 'tr',
+        duration: 10000
+      })
     }
   </script>
   {% block script %} {% endblock script %}
@@ -208,4 +207,3 @@
 </body>
 
 </html>
-

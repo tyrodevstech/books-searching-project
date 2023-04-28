@@ -205,11 +205,12 @@ class ContactForm(forms.ModelForm):
             "phone": forms.TextInput(
                 attrs={"class": "", "placeholder": "Phone", "required": "required"}
             ),
-            "message": forms.TextInput(
+            "message": forms.Textarea(
                 attrs={
                     "class": "message-box",
                     "placeholder": "Leave a message...",
                     "required": "required",
+                    "rows": 6,
                 }
             ),
         }

@@ -90,7 +90,7 @@ urlpatterns = [
     ),
     path(
         "",
-        home_index,
+        Home.as_view(),
         name="home",
     ),
     path("store/", store_view, name="store"),

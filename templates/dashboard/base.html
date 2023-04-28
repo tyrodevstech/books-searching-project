@@ -260,6 +260,17 @@
             duration: 10000
          })
       }
+      window.addEventListener("DOMContentLoaded", (event) => {
+         $('input[type=file]').on('change', function (e) {
+            file = e.target.files[0]
+            $(`label[for=${e.target.id}] .dropzone-text`).hide()
+            let uploadedFileContainer = $(`label[for=${e.target.id}] .uploaded-file-container`)
+            uploadedFileContainer.hide()
+            uploadedFileContainer.find('img').attr('src', URL.createObjectURL(file));
+            uploadedFileContainer.find('span').text(file.name)
+            uploadedFileContainer.fadeIn('fast')
+         })
+      });
    </script>
 
    {% block script %} {% endblock script %}
