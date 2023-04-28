@@ -4,14 +4,23 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
 
-def custom_dec(function):
+def user_decorator(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        print(request.user)
-        if not request.user.is_superuser:
-            print("Yes")
+        if request.user.role == "User":
             return function(request, *args, **kwargs)
         else:
-            print('No')
             raise Http404
+
+    return wrap
+
+
+def seller_decorator(function):
+    @wraps(function)
+    def wrap(request, *args, **kwargs):
+        if request.user.role == "Shop Owner":
+            return function(request, *args, **kwargs)
+        else:
+            raise Http404
+
     return wrap

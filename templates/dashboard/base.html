@@ -20,6 +20,8 @@
 </head>
 
 <body class="h-[calc(100%-4rem)] md:h-[calc(100%-3.5rem)] mt-16 md:mt-14 relative">
+   {% with request.user.role as userRole %}
+
    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 ">
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
          <div class="flex items-center justify-between">
@@ -87,9 +89,10 @@
       aria-label="Sidebar">
       <div class="h-full px-3 pb-4 overflow-y-auto bg-white ">
          <ul class="space-y-2 font-medium">
+            {% url 'app_book:dashboard' as dashboardV %}
             <li>
                <a href="{% url 'app_book:dashboard' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == dashboardV %}bg-gray-100{% endif %}">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-home flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -102,9 +105,10 @@
                   <span class="ml-3">Dashboard</span>
                </a>
             </li>
+            {% url 'app_book:update_profile' as update_profileV %}
             <li>
                <a href="{% url 'app_book:update_profile' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == update_profileV %}bg-gray-100{% endif %} ">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-user-edit flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -117,9 +121,11 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Update Profile</span>
                </a>
             </li>
+            {% if userRole == 'Shop Owner' %}
+            {% url 'app_book:store' as storeV %}
             <li>
                <a href="{% url 'app_book:store' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == storeV %}bg-gray-100{% endif %}">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-building-store flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -134,9 +140,13 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Store</span>
                </a>
             </li>
+            {% endif %}
+
+            {% if userRole == 'Shop Owner' %}
+            {% url 'app_book:book_list' as book_listV %}
             <li>
                <a href="{% url 'app_book:book_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == book_listV %}bg-gray-100{% endif %} ">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-books flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -155,9 +165,12 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Books</span>
                </a>
             </li>
+            {% endif %}
+
+            {% url 'app_book:book_category_list' as book_category_listV %}
             <li>
                <a href="{% url 'app_book:book_category_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == book_category_listV %}bg-gray-100{% endif %} ">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-category  flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -171,9 +184,12 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Category</span>
                </a>
             </li>
+
+            {% if userRole == 'Shop Owner' %}
+            {% url 'app_book:book_author_list' as book_author_listV %}
             <li>
                <a href="{% url 'app_book:book_author_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == book_author_listV %}bg-gray-100{% endif %} ">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-writing flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -186,9 +202,13 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Author</span>
                </a>
             </li>
+            {% endif %}
+
+            {% if userRole == 'Shop Owner' %}
+            {% url 'app_book:book_publisher_list' as book_publisher_listV %}
             <li>
                <a href="{% url 'app_book:book_publisher_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == book_publisher_listV %}bg-gray-100{% endif %} ">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-brand-telegram flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -199,9 +219,12 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Publisher</span>
                </a>
             </li>
+            {% endif %}
+
+            {% url 'app_book:order_list' as order_listV %}
             <li>
                <a href="{% url 'app_book:order_list' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white {% if request.path == order_listV %}bg-gray-100 dark:bg-gray-700{% endif %}">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-shopping-cart  flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -215,9 +238,12 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Order</span>
                </a>
             </li>
+
+            {% if userRole == 'User' %}
+            {% url 'app_book:review' as reviewV %}
             <li>
                <a href="{% url 'app_book:review' %}"
-                  class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 ">
+                  class="flex items-center p-2 text-gray-900 rounded-lg {% if request.path == reviewV %}bg-gray-100 dark:bg-gray-700{% endif %} ">
                   <svg xmlns="http://www.w3.org/2000/svg"
                      class="icon icon-tabler icon-tabler-message-star flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 "
                      width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -234,6 +260,8 @@
                   <span class="flex-1 ml-3 whitespace-nowrap">Review</span>
                </a>
             </li>
+            {% endif %}
+
          </ul>
       </div>
    </aside>
@@ -245,22 +273,31 @@
    {% if messages %}
    {% for message in messages %}
    {% if message.tags == 'success' %}
-   <div id="msg_text" style="display:none;">{{ message }}</div>
+   <div id="msg_text_success" class="message">{{ message }}</div>
+   {% elif message.tags == 'error' %}
+   <div id="msg_text_error" class="message">{{ message }}</div>
    {% endif %}
    {% endfor %}
    {% endif %}
+
+   {% endwith%}
 
    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"></script>
    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
    <script src="{% static 'js/tata.js' %}"></script>
    <script>
-      if ($('#msg_text').text() != '') {
-         tata.success('Notification', $('#msg_text').text(), {
+    if ($('#msg_text_success').text() != '') {
+        tata.success('Success', $('#msg_text_success').text(), {
             position: 'tr',
             duration: 10000
-         })
-      }
-   </script>
+        })
+    } else if ($('#msg_text_error').text() != '') {
+        tata.error('Error', $('#msg_text_error').text(), {
+            position: 'tr',
+            duration: 10000
+        })
+    }
+</script>
 
    {% block script %} {% endblock script %}
 </body>
