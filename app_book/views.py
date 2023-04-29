@@ -16,6 +16,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
 
 from app_book.decorators import user_decorator, seller_decorator
 from app_book.forms import (
@@ -48,14 +49,17 @@ from .utils import getSortedBooksLocations
 seller_decorators = [login_required(login_url="app_book:login"), seller_decorator]
 user_decorators = [login_required(login_url="app_book:login"), user_decorator]
 
+
 class Home(FormView):
-    template_name = 'home/index.html'
+    template_name = "home/index.html"
     form_class = ContactForm
-    success_url = reverse_lazy('app_book:home')
+    success_url = reverse_lazy("app_book:home")
+
     def form_valid(self, form):
         self.object = form.save()
         messages.success(self.request, "Message Sent successfully !")
         return super().form_valid(form)
+
 
 # def home_index(request):
 #     return render(request, "home/index.html")
@@ -249,6 +253,14 @@ class BookCategoryBaseView(View):
 
 class BookCategoryListView(BookCategoryBaseView, ListView):
     template_name = "dashboard/category/list.html"
+    paginate_by = 3
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if "search_value" in self.request.GET:
+            search = self.request.GET.get("search_value", "")
+            queryset = queryset.filter(category_name__icontains=search)
+        return queryset
 
 
 @method_decorator(seller_decorators, name="dispatch")
