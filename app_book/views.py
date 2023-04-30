@@ -57,8 +57,6 @@ class Home(FormView):
         messages.success(self.request, "Message Sent successfully !")
         return super().form_valid(form)
 
-# def home_index(request):
-#     return render(request, "home/index.html")
 
 
 def login_view(request):

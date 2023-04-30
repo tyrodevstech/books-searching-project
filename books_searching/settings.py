@@ -23,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-q84tj5h%b#+u=3rk&fl#%1$sc6%6@%-#49n(=j7s@2mv+@yh7="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+False
 ALLOWED_HOSTS = ["*"]
 
 
@@ -51,6 +50,7 @@ FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
