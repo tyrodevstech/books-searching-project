@@ -92,6 +92,8 @@ class BookCategoryModel(models.Model):
         verbose_name = "Book Category"
         verbose_name_plural = "Book Categories"
 
+        ordering = ["-id"]
+
     def __str__(self):
         return f"{self.category_name}"
 
