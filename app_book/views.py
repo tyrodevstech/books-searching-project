@@ -33,6 +33,7 @@ from app_book.forms import (
 )
 from app_book.models import (
     AuthorModel,
+    BlogModel,
     BookCategoryModel,
     BookModel,
     ContactModel,
@@ -59,6 +60,12 @@ class Home(FormView):
         self.object = form.save()
         messages.success(self.request, "Message Sent successfully !")
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blogs"] = BlogModel.objects.all()[:3]
+        context["reviews"] = ReviewModel.objects.all()[:3]
+        return context
 
 
 def login_view(request):
