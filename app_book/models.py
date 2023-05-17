@@ -200,12 +200,30 @@ class ContactModel(models.Model):
 
 class ReviewModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    comment = models.CharField(max_length=500, null=True)
+    comment = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
+        ordering = ["-id"]
+
         verbose_name = "Review"
         verbose_name_plural = "Reviews"
 
     def __str__(self):
         return f"{self.created_at}"
+
+
+class BlogModel(models.Model):
+    title = models.CharField(max_length=525, null=True, blank=True)
+    content = models.TextField(max_length=1525, null=True, blank=True)
+    banner = models.ImageField(upload_to="banner-image/%Y/%d/%b", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+        verbose_name = "Blog"
+        verbose_name_plural = "Blogs"
+
+    def __str__(self):
+        return f"{self.title}"

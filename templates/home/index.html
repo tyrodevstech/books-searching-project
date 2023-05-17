@@ -170,11 +170,13 @@
       <hr>
     </div>
     <div class="row">
+      {% if reviews %}
+      {% for review in reviews %}
       <div class="col-md-6 mx-auto">
         <div class="client_container ">
           <div class="detail-box">
             <p>
-              Editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by
+              {{ review.comment|safe }}
             </p>
             <span>
               <i class="fa fa-quote-left" aria-hidden="true"></i>
@@ -182,69 +184,28 @@
           </div>
           <div class="client_id">
             <div class="img-box">
-              <img src="{% static 'images/c1.jpg' %}" alt="">
+              <img src="{% if review.user.image %}{{ review.user.image.url }}{% else %}{% static 'images/p.png' %}{% endif %}" alt="profile-img">
             </div>
             <div class="client_name">
               <h5>
-                Jone Mark
+                {{ review.user.name }}
               </h5>
               <h6>
-                Student
+                created at - {{ review.created_at|date:"d M, Y" }}
               </h6>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6 mx-auto">
-        <div class="client_container ">
-          <div class="detail-box">
-            <p>
-              Editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by
-            </p>
-            <span>
-              <i class="fa fa-quote-left" aria-hidden="true"></i>
-            </span>
-          </div>
-          <div class="client_id">
-            <div class="img-box">
-              <img src="{% static 'images/c2.jpg' %}" alt="">
-            </div>
-            <div class="client_name">
-              <h5>
-                Anna Crowe
-              </h5>
-              <h6>
-                Student
-              </h6>
-            </div>
-          </div>
-        </div>
+      {% endfor %}
+      {% else %}
+      <div class="heading_container heading_center">
+        <h5>
+          No review contents are available!
+        </h5>
+        <hr>
       </div>
-      <div class="col-lg-6 mx-auto">
-        <div class="client_container ">
-          <div class="detail-box">
-            <p>
-              Editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by
-            </p>
-            <span>
-              <i class="fa fa-quote-left" aria-hidden="true"></i>
-            </span>
-          </div>
-          <div class="client_id">
-            <div class="img-box">
-              <img src="{% static 'images/c3.jpg' %}" alt="">
-            </div>
-            <div class="client_name">
-              <h5>
-                Hilley James
-              </h5>
-              <h6>
-                Student
-              </h6>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endif %}  
     </div>
   </div>
 </section>
@@ -261,22 +222,24 @@
       </h2>
     </div>
     <div class="row">
+      {% if blogs %}
+      {% for blog in blogs %}
       <div class="col-md-4">
         <div class="box">
           <div class="img-box">
-            <img src="{% static 'images/b1.jpg' %}" alt="">
+            <img src="{% if blog.banner %}{{ blog.banner.url }}{% else %}{% static 'images/b1.jpg' %}{% endif %}" alt="">
             <h4 class="blog_date">
               <span>
-                19 January 2021
+                {{ blog.created_at|date:"d M, Y" }}
               </span>
             </h4>
           </div>
           <div class="detail-box">
             <h5>
-              Eius, dolor? Vel velit sed doloremque
+              {{ blog.title }}
             </h5>
             <p class="line-clamp-5">
-              Incidunt magni explicabo ullam ipsa quo consequuntur eveniet illo? Aspernatur nam dolorem a neque? Esse eaque dolores hic debitis cupiditate, ad beatae voluptatem numquam dignissimos ab porro
+              {{ blog.content|safe }}
             </p>
             <a href="">
               Read More
@@ -284,52 +247,14 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="box">
-          <div class="img-box">
-            <img src="{% static 'images/b2.jpg' %}" alt="">
-            <h4 class="blog_date">
-              <span>
-                19 January 2021
-              </span>
-            </h4>
-          </div>
-          <div class="detail-box">
-            <h5>
-              Minus aliquid alias porro iure fuga
-            </h5>
-            <p class="line-clamp-5">
-              Officiis veritatis id illo eligendi repellat facilis animi adipisci praesentium. Tempore ab provident porro illo ex obcaecati deleniti enim sequi voluptas at. Harum veniam eos nisi distinctio! Porro, reiciendis eius.
-            </p>
-            <a href="">
-              Read More
-            </a>
-          </div>
-        </div>
+      {% endfor %}
+      {% else %}
+      <div class="heading_container heading_center">
+        <h5>
+          No blog contents are available!
+        </h5>
       </div>
-      <div class="col-md-4">
-        <div class="box">
-          <div class="img-box">
-            <img src="{% static 'images/b2.jpg' %}" alt="">
-            <h4 class="blog_date">
-              <span>
-                19 January 2021
-              </span>
-            </h4>
-          </div>
-          <div class="detail-box">
-            <h5>
-              Minus aliquid alias porro iure fuga
-            </h5>
-            <p class="line-clamp-5">
-              Officiis veritatis id illo eligendi repellat facilis animi adipisci praesentium. Tempore ab provident porro illo ex obcaecati deleniti enim sequi voluptas at. Harum veniam eos nisi distinctio! Porro, reiciendis eius.
-            </p>
-            <a href="">
-              Read More
-            </a>
-          </div>
-        </div>
-      </div>
+      {% endif %}
     </div>
   </div>
 </section>
