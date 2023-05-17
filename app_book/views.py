@@ -79,10 +79,10 @@ def login_view(request):
 
             if userObject:
                 eamil = userObject.email
-            user = authenticate(email=eamil, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("app_book:dashboard")
+                user = authenticate(email=eamil, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect("app_book:dashboard")
             else:
                 print("error")
                 messages.error(
