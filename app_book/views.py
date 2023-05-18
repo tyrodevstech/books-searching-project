@@ -256,7 +256,7 @@ class BookCategoryBaseView(View):
 
 class BookCategoryListView(BookCategoryBaseView, ListView):
     template_name = "dashboard/category/list.html"
-    paginate_by = 3
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()

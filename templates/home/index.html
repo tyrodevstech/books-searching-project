@@ -107,7 +107,7 @@
         <div class="col-sm-6 col-md-4 ">
           <div class="box ">
             <div class="img-box">
-              <img src="{% static 'images/cat6.png ' %}" alt="">
+              <img src="{% static 'images/cat6.png' %}" alt="">
             </div>
             <div class="detail-box">
               <h5>
@@ -184,7 +184,7 @@
           </div>
           <div class="client_id">
             <div class="img-box">
-              <img src="{% if review.user.image %}{{ review.user.image.url }}{% else %}{% static 'images/p.png' %}{% endif %}" alt="profile-img">
+              <img src="{% if review.user.image %}{{ review.user.image.url }}{% else %}{% static 'images/p.png' %}{% endif %}" alt="profile-img" style="aspect-ratio: 1/1;object-fit: cover;">
             </div>
             <div class="client_name">
               <h5>

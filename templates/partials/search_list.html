@@ -12,7 +12,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <b>{{ book.title }}</b> - by "{{book.author}}" ({{book.category}})
+            <b>{{ book.title|truncatechars:30 }}</b> - by "{{book.author|truncatechars:30}}" ({{book.category}})
         </div>
         <span class="inline-block bg-blue-500 text-white rounded-md px-2 py-1 text-xs font-semibold">{{book.distance}}
             km</span>
