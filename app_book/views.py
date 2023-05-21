@@ -183,10 +183,19 @@ class BookBaseView(View):
 @method_decorator(seller_decorators, name="dispatch")
 class BookListView(BookBaseView, ListView):
     template_name = "dashboard/book/list.html"
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(store__user=self.request.user)
+        search = self.request.GET.get("search_value", "")
+        if search:
+            queryset = queryset.filter(
+                store__user=self.request.user, title__icontains=search
+            )
+        else:
+            queryset = queryset.filter(store__user=self.request.user)
+
+        return queryset
 
 
 @method_decorator(seller_decorators, name="dispatch")
@@ -292,6 +301,14 @@ class BookAuthorBaseView(View):
 @method_decorator(seller_decorators, name="dispatch")
 class BookAuthorListView(BookAuthorBaseView, ListView):
     template_name = "dashboard/author/list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if "search_value" in self.request.GET:
+            search = self.request.GET.get("search_value", "")
+            queryset = queryset.filter(author_name__icontains=search)
+        return queryset
 
 
 @method_decorator(seller_decorators, name="dispatch")
@@ -320,6 +337,14 @@ class BookPublisherBaseView(View):
 @method_decorator(seller_decorators, name="dispatch")
 class BookPublisherListView(BookPublisherBaseView, ListView):
     template_name = "dashboard/publisher/list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if "search_value" in self.request.GET:
+            search = self.request.GET.get("search_value", "")
+            queryset = queryset.filter(publisher_name__icontains=search)
+        return queryset
 
 
 @method_decorator(seller_decorators, name="dispatch")
@@ -407,13 +432,28 @@ class OrderBaseView(View):
 
 class OrderListView(OrderBaseView, ListView):
     template_name = "dashboard/order/list.html"
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        search = self.request.GET.get("search_value", "")
+
         if self.request.user.role == "Shop Owner":
-            return queryset.filter(seller=self.request.user)
+            if search:
+                return queryset.filter(
+                    seller=self.request.user,
+                    book__title__icontains=search,
+                )
+            else:
+                return queryset.filter(seller=self.request.user)
         elif self.request.user.role == "User":
-            return queryset.filter(customer=self.request.user)
+            if search:
+                return queryset.filter(
+                    customer=self.request.user,
+                    book__title__icontains=search,
+                )
+            else:
+                return queryset.filter(customer=self.request.user)
         else:
             return queryset
 

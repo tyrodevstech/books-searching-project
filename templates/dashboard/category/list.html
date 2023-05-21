@@ -140,7 +140,7 @@
                 {% for category in bookcategorymodel_list %}
                 <tr class="border-b dark:border-gray-700">
                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{forloop.counter}}</th>
+                        {{ page_obj.start_index|add:forloop.counter0 }}</th>
                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{category.category_name}}</th>
                     <td class="px-4 py-3">
@@ -167,7 +167,7 @@
                 {% for category in bookcategorymodel_list %}
                 <tr class="border-b dark:border-gray-700">
                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{forloop.counter}}</th>
+                        {{ page_obj.start_index|add:forloop.counter0 }}</th>
                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{category.category_name}}
                     </th>

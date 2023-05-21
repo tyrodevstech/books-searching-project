@@ -45,7 +45,7 @@ class StoreModel(models.Model):
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name="store"
     )
     name = models.CharField(max_length=525, null=True, blank=True)
-    phone = PhoneNumberField(null=False, blank=False, unique=True,region='BD')
+    phone = PhoneNumberField(null=False, blank=False, unique=True, region="BD")
     email = models.EmailField(null=True, blank=True, unique=True)
     street = models.TextField(max_length=525, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -177,6 +177,8 @@ class OrderModel(models.Model):
     class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"
+
+        ordering = ["-id"]
 
     def __str__(self):
         return f"Order-#{self.id}"
