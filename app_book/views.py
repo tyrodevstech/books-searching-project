@@ -1,4 +1,5 @@
 import random
+import folium
 
 from django.conf import settings
 from django.contrib import messages
@@ -83,11 +84,11 @@ def login_view(request):
                 if user is not None:
                     login(request, user)
                     return redirect("app_book:dashboard")
-            else:
-                print("error")
-                messages.error(
-                    request, "Email or Password didn't match. Please try again!"
-                )
+                else:
+                    print("error")
+                    messages.error(
+                        request, "Email or Password didn't match. Please try again!"
+                    )
     return render(request, "auth/login.html")
 
 
@@ -492,6 +493,7 @@ def search_list_view(request):
 
         context = {
             "sorted_books": sorted_books,
+            "user_location": user_location,
         }
         return render(request, "partials/search_list.html", context)
     else:
@@ -502,15 +504,89 @@ def search_list_view(request):
 @user_decorator
 def search_details_view(request, pk):
     book = get_object_or_404(BookModel, id=pk)
+    user_location = request.GET.get("user_location")
+    store_location = book.store.location
+
+    if store_location and user_location:
+        user_location_coords = tuple(map(float, user_location.split(",")))
+        store_location_coords = tuple(map(float, store_location.split(",")))
+
+
+    m = folium.Map(user_location_coords, zoom_start=11)
+
+    folium.Marker(
+        location=user_location_coords,
+        tooltip="Click me!",
+        popup="Me",
+        icon=folium.Icon(icon="user", color="red", prefix="fa"),
+    ).add_to(m)
+
+    folium.Marker(
+        location=store_location_coords,
+        tooltip="Click me!",
+        popup=book.store.name,
+        icon=folium.Icon(icon="store", color="blue" , prefix="fa"),
+    ).add_to(m)
+
+    folium.PolyLine([user_location_coords, store_location_coords], tooltip="Distance").add_to(m)
+
+    
     if request.method == "POST":
         order = OrderModel.objects.create(
             book=book, store=book.store, customer=request.user, seller=book.store.user
         )
         return redirect("app_book:order_list")
+    
+
     context = {
         "book": book,
+        "map": m._repr_html_(),
     }
+    
     return render(request, "dashboard/search_details.html", context)
+
+
+
+
+@login_required(login_url="app_book:login")
+@user_decorator
+def stores_map_view(request):
+    store_qs = StoreModel.objects.all()
+    user_location = request.GET.get("user_location")
+
+    if user_location:
+        user_location_coords = tuple(map(float, user_location.split(",")))
+
+        m = folium.Map(user_location_coords, zoom_start=11)
+
+        for store in store_qs:
+            if store.location:
+                store_location_coords = tuple(map(float, store.location.split(",")))
+                folium.Marker(
+                location=store_location_coords,
+                tooltip="Click me!",
+                popup=store.name,
+                icon=folium.Icon(icon="store", color="blue" , prefix="fa"),).add_to(m)
+
+
+        folium.Marker(
+            location=user_location_coords,
+            tooltip="Click me!",
+            popup="Me",
+            icon=folium.Icon(icon="user", color="red", prefix="fa"),
+        ).add_to(m)
+
+    
+        context = {
+            "map": m._repr_html_(),
+        }
+    else:
+        context ={
+            "map": None,
+        }
+
+    return render(request, "dashboard/map_view.html", context)
+
 
 
 def custom_page_not_found_view(request, exception=None):

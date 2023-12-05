@@ -94,6 +94,7 @@ urlpatterns = [
         name="home",
     ),
     path("store/", store_view, name="store"),
+    path("stores-map/", stores_map_view, name="stores-map"),
     path("review/add/", AddReview.as_view(), name="review"),
     path("contact/", ContactView.as_view(), name="contact"),
 ]

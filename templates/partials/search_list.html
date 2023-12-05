@@ -2,17 +2,42 @@
 <h3 class="mt-2 text-sm">Search Results:</h3>
 <ul class="w-full mt-2 bg-white rounded p-2 border border-gray-200 shadow-sm">
     {% for book in sorted_books %}
-    <a href="{% url 'app_book:search_details' book.id %}"
+    <a href="{% url 'app_book:search_details' book.id %}?user_location={{user_location}}"
         class="pl-8 pr-2 flex justify-between items-center bg-white py-2 rounded relative cursor-pointer hover:bg-gray-50 hover:text-gray-900 border-b last:border-b-0 mb-2 last:mb-0">
         <div>
-            <svg class="stroke-current absolute w-4 h-4 left-2 top-1/2 -translate-y-1/2"
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <b>{{ book.title|truncatechars:30 }}</b> - by "{{book.author|truncatechars:30}}" ({{book.category}})
+            <div class="flex flex-row items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-store text-slate-700" width="20"
+                    height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 21l18 0" />
+                    <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />
+                    <path d="M5 21l0 -10.15" />
+                    <path d="M19 21l0 -10.15" />
+                    <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+                </svg>
+                <b>{{ book.store_name }}</b> |
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone text-slate-700" width="20"
+                    height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+                </svg>
+                {{ book.store_phone }}
+            </div>
+            <p class="ml-7 text-xs">{{ book.store_city }}, {{ book.store_street }}</p>
+            <div class="flex items-center gap-2 text-slate-500 mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-book-2" width="18"
+                    height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M19 4v16h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12z" />
+                    <path d="M19 16h-12a2 2 0 0 0 -2 2" />
+                    <path d="M9 8h6" />
+                </svg>
+                <b class="text-sm">{{ book.title|truncatechars:30 }}</b> - by "{{book.author|truncatechars:30}}" ({{book.category}})
+            </div>
         </div>
         <span class="inline-block bg-blue-500 text-white rounded-md px-2 py-1 text-xs font-semibold">{{book.distance}}
             km</span>
