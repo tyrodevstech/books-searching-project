@@ -104,7 +104,11 @@
         <h2 class="mb-4 text-xl font-semibold leading-none text-gray-900 md:text-2xl dark:text-white">
             Map View Between Shop Owner and Customer -
         </h2>
+        {% if map %}
         {{ map|safe }}
+        {% else %}
+        <p class="text-red-600 text-base"> -- User location coordinates error!</p>
+        {% endif %}
     </div>
 </section>
 {% endif %}

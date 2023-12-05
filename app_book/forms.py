@@ -243,7 +243,7 @@ class BookForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = OrderModel
-        fields = ["order_status", "is_paid", "book", "payment_method", "transaction_id"]
+        fields = ["order_status", "is_paid", "book"]
 
 
 class BookCategoryForm(forms.ModelForm):
