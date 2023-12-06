@@ -183,7 +183,7 @@
                     <th scope="col" class="px-4 py-3">Payment Method</th>
                     <th scope="col" class="px-4 py-3">Transaction Id</th>
                     <th scope="col" class="px-4 py-3">Order Date</th>
-                    <th scope="col" class="px-4 py-3">Order Status</th>
+                    <th scope="col" class="px-4 py-3">View</th>
                 </tr>
             </thead>
             <tbody>
@@ -196,9 +196,12 @@
                     <td class="px-4 py-3">{{order.payment_method}}</td>
                     <td class="px-4 py-3">{{order.transaction_id}}</td>
                     <td class="px-4 py-3">{{order.order_date}}</td>
-                    <td class="px-4 py-3"><span
-                            class="bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md border border-orange-100 dark:bg-gray-700 dark:border-orange-300 dark:text-orange-300">
-                            {{order.order_status}}</span></td>
+                    <td class="px-4 py-3">
+                        <a href="{% url 'app_book:order_details' order.id %}"
+                            class="bg-green-400 text-green-700 text-xs font-medium mr-2 px-2.5 py-1 rounded-md border border-green-100 dark:bg-gray-700 dark:border-green-300 dark:text-green-300">
+                            Details
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
