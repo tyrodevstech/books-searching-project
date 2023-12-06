@@ -33,23 +33,26 @@
         </div>
         <div class="md:col-span-5 w-full mx-auto">
             <p class="text-xl font-medium">Order Details</p>
-            <p class="text-gray-400">Your order placed details informations.</p>
-
-            <h4 class="text-xl font-semibold mt-6"><i class="ti ti-user-pentagon mr-2"></i>Customer Informations -</h4> <hr class="my-2">
+            <p class="text-gray-400">Your placed order details informations.</p>
+            {% if request.user.role == 'Shop Owner' %}
+            <h4 class="text-lg font-semibold mt-6"><i class="ti ti-user-pentagon mr-2"></i>Customer Informations -</h4> <hr class="my-2">
             <p class="text-gray-600 text-base my-1">Customer Name: {{ order_obj.customer.name }}</p>
             <p class="text-gray-600 text-base my-1">Customer Email: {{ order_obj.customer.email }}</p>
             <p class="text-gray-600 text-base my-1">Customer Phone: {{ order_obj.customer.phone }}</p>
             <p class="text-gray-600 text-base my-1">Customer Address: {{ order_obj.customer.address }}</p>
-
-            <h4 class="text-xl font-semibold mt-6"><i class="ti ti-user-pentagon mr-2"></i>Seller Informations -</h4> <hr class="my-2">
-            <p class="text-gray-600 text-base my-1">Seller Name: {{ order_obj.seller.name }}</p>
+            {% else %}
+            <h4 class="text-lg font-semibold mt-6"><i class="ti ti-user-pentagon mr-2"></i>Seller Informations -</h4> <hr class="my-2">
             <p class="text-gray-600 text-base my-1">Store Name: {{ order_obj.store.name }}</p>
             <p class="text-gray-600 text-base my-1">Store Email: {{ order_obj.store.email }}</p>
             <p class="text-gray-600 text-base my-1">Seller Phone: {{ order_obj.store.phone }}</p>
             <p class="text-gray-600 text-base my-1">Seller Address: {{ order_obj.store.city }}, {{ order_obj.store.street }} | {{ order_obj.store.zip_code }}</p>
-            
+            {% endif %}
+            <h4 class="text-lg font-semibold mt-6"><i class="ti ti-credit-card mr-2"></i>Payment Informations -</h4> <hr class="my-2">
+            <p class="text-gray-600 text-base my-1">Payment Method: {{ order_obj.payment.payment_method }}</p>
+            <p class="text-gray-600 text-base my-1">Transaction id: {{ order_obj.payment.transaction_id }}</p>
+            <p class="text-gray-600 text-base my-1">Payment Date: {{ order_obj.payment.payment_date }}</p>
 
-            <h4 class="text-xl font-semibold mt-6"><i class="ti ti-receipt mr-2"></i>Book Purchase Price Details -</h4> <hr class="my-2">
+            <h4 class="text-lg font-semibold mt-6"><i class="ti ti-receipt mr-2"></i>Book Purchase Price Details -</h4> <hr class="my-2">
             <p class="text-gray-600 text-base my-1">Book Price: {{ order_obj.book.price }} BDT.</p>
             <p class="text-gray-600 text-base my-1">Book Quantity: x {{ order_obj.books_quantity }}</p>
             <p class="text-gray-600 text-base my-1">Shipping Cost: 70 BDT.</p>

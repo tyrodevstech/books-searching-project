@@ -67,7 +67,7 @@
                 document.getElementById('timer').innerText = countdownValue;
                 countdownValue--;
                 if (countdownValue < 0) {
-                    // window.location.href = 'dashboard.html';
+                    window.location.href = "{% url 'app_book:order_list' %}";
                 } else {
                     setTimeout(updateCountdown, 1000);
                 }

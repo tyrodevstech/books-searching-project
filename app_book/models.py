@@ -165,7 +165,7 @@ class PaymentModel(models.Model):
     )
     amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(
-        max_length=100, choices=PAYMENT_METHOD_CHOICES, null=True, blank=True
+        max_length=100, choices=PAYMENT_METHOD_CHOICES, null=True, blank=True, default='Credit Card'
     )
     transaction_id = models.CharField(max_length=100, null=True, blank=True)
     payment_date = models.DateTimeField(auto_now_add=True)

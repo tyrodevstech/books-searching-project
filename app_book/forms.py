@@ -13,7 +13,6 @@ from app_book.models import (
     AuthorModel,
     PublisherModel,
     OrderModel,
-    PaymentModel,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -248,23 +247,28 @@ class OrderForm(forms.ModelForm):
 
         widgets = {
             "billing_address": forms.TextInput(
-                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5", "placeholder": "address", "required": "required"}
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
+                    "placeholder": "address",
+                    "required": "required",
+                }
             ),
             "billing_email": forms.EmailInput(
-                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5", "placeholder": "example@gmail.com", "type": "email", "required": "required"}
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
+                    "placeholder": "example@gmail.com",
+                    "type": "email",
+                    "required": "required",
+                }
             ),
             "billing_phone": forms.TextInput(
-                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5", "placeholder": "XXX XXXX XXXXXX", "required": "required"}
+                attrs={
+                    "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
+                    "placeholder": "XXX XXXX XXXXXX",
+                    "required": "required",
+                }
             ),
         }
-
-
-
-class PaymentForm(forms.ModelForm):
-    class Meta:
-        model = PaymentModel
-        fields = ["amount_paid", "payment_method", "transaction_id"]
-
 
 
 class BookCategoryForm(forms.ModelForm):

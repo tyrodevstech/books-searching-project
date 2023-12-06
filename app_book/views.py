@@ -1,27 +1,27 @@
 import random
+
 import folium
 import folium.plugins as plugs
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import CreateView, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
 from django.views.generic.list import ListView
-from django.utils.decorators import method_decorator
-from django.core.paginator import Paginator
 from geopy.distance import geodesic
 
-from app_book.decorators import user_decorator, seller_decorator
+from app_book.decorators import seller_decorator, user_decorator
 from app_book.forms import (
     BookAuthorForm,
     BookCategoryForm,
@@ -29,7 +29,6 @@ from app_book.forms import (
     BookPublisherForm,
     ContactForm,
     OrderForm,
-    PaymentForm,
     ReviewForm,
     StoreForm,
     UserRegistrationForm,
@@ -50,6 +49,7 @@ from app_book.models import (
 )
 
 from .utils import getSortedBooksLocations
+import uuid
 
 # Create your views here.
 seller_decorators = [login_required(login_url="app_book:login"), seller_decorator]
@@ -403,16 +403,6 @@ def store_view(request):
     return render(request, "dashboard/store.html", context)
 
 
-
-
-def checkout_view(request):
-    book = get_object_or_404(BookModel, id=9)
-    context = {
-        'book':book
-    }
-    return render(request, "dashboard/checkout.html",context)
-
-
 @method_decorator(user_decorators, name="dispatch")
 class AddReview(CreateView):
     model = ReviewModel
@@ -476,39 +466,45 @@ class OrderListView(OrderBaseView, ListView):
 class CheckoutView(FormView):
     template_name = "dashboard/checkout.html"
     model = OrderModel
-    success_url = reverse_lazy("app_book:dashboard")
     form_class = OrderForm
+
+    def get_success_url(self):
+        return reverse_lazy(
+            "app_book:payment",
+            kwargs={
+                "pk": self.order.id,
+            },
+        )
 
     def form_valid(self, form):
         order = form.save(commit=False)
 
-        quantity = self.get_context_data().get('quantity')
-        book = self.get_context_data().get('book')
+        quantity = self.get_context_data().get("quantity")
+        book = self.get_context_data().get("book")
 
         order.book = book
         order.store = book.store
         order.customer = self.request.user
         order.seller = book.store.user
         order.books_quantity = quantity
+        order.order_status = "Complete"
         order.is_paid = True
-
         order.save()
-
+        self.order = order
         messages.success(self.request, "Order placed successfully !")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        book_id = self.kwargs.get('pk')
+        book_id = self.kwargs.get("pk")
         context = super().get_context_data(**kwargs)
-        quantity = int(self.request.GET.get('quantity', 1))
+        quantity = int(self.request.GET.get("quantity", 1))
         book = get_object_or_404(BookModel, id=book_id)
         context["book"] = book
         context["quantity"] = quantity
         context["price"] = book.price
-        context["sub_total_price"] = (book.price * quantity)
-        context["total_price"] = (book.price * quantity) + 70
+        context["sub_total_price"] = round(book.price * quantity, 2)
+        context["total_price"] = round((book.price * quantity) + 70, 2)
         return context
-
 
 
 class OrderDetailsView(OrderBaseView, DetailView):
@@ -516,22 +512,33 @@ class OrderDetailsView(OrderBaseView, DetailView):
     context_object_name = "order_obj"
 
     def get_context_data(self, **kwargs):
-        order_id = self.kwargs.get('pk')
+        order_id = self.kwargs.get("pk")
         context = super().get_context_data(**kwargs)
         order = get_object_or_404(OrderModel, id=order_id)
 
-        context["sub_total_price"] = (order.book.price * order.books_quantity)
-        context["total_price"] = (order.book.price * order.books_quantity) + 70
+        context["sub_total_price"] = round(order.book.price * order.books_quantity, 2)
+        context["total_price"] = round(
+            (order.book.price * order.books_quantity) + 70, 2
+        )
         return context
 
 
-
-class PaymentView(FormView):
+class PaymentView(TemplateView):
     template_name = "dashboard/payment.html"
-    model = PaymentModel
     success_url = reverse_lazy("app_book:dashboard")
-    form_class = PaymentForm
 
+    def get(self, request, pk, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        order = get_object_or_404(OrderModel, pk=pk)
+        if not hasattr(order, "payment"):
+            payment = PaymentModel()
+            payment.order = order
+            payment.amount_paid = (order.books_quantity * order.book.price) + 70
+            payment.transaction_id = str(uuid.uuid4())
+            payment.save()
+            order.is_paid
+        print(order.payment)
+        return self.render_to_response(context)
 
 
 @method_decorator(seller_decorators, name="dispatch")
@@ -586,7 +593,6 @@ def search_details_view(request, pk):
         user_location_coords = tuple(map(float, user_location.split(",")))
         store_location_coords = tuple(map(float, store_location.split(",")))
 
-
         m = folium.Map(user_location_coords, zoom_start=11)
 
         folium.Marker(
@@ -600,19 +606,24 @@ def search_details_view(request, pk):
             location=store_location_coords,
             tooltip="Click me!",
             popup=book.store.name,
-            icon=folium.Icon(icon="store", color="blue" , prefix="fa"),
+            icon=folium.Icon(icon="store", color="blue", prefix="fa"),
         ).add_to(m)
 
         distance = round(
-                    geodesic(user_location_coords, store_location_coords).kilometers, 2
+            geodesic(user_location_coords, store_location_coords).kilometers, 2
         )
 
-        line = folium.PolyLine([store_location_coords, user_location_coords], weight=5, tooltip=f"Distance: {distance}km").add_to(m)
-        attr = {'fill': '#111222', 'font-weight': 'bold', 'font-size': '20'}
-        wind_textpath = plugs.PolyLineTextPath(line, f"{distance}km", center=True, offset=24, attributes=attr)
+        line = folium.PolyLine(
+            [store_location_coords, user_location_coords],
+            weight=5,
+            tooltip=f"Distance: {distance}km",
+        ).add_to(m)
+        attr = {"fill": "#111222", "font-weight": "bold", "font-size": "20"}
+        wind_textpath = plugs.PolyLineTextPath(
+            line, f"{distance}km", center=True, offset=24, attributes=attr
+        )
         m.add_child(line)
         m.add_child(wind_textpath)
-    
 
         context = {
             "book": book,
@@ -623,16 +634,8 @@ def search_details_view(request, pk):
             "book": book,
             "map": None,
         }
-    
-    # if request.method == "POST":
-    #     order = OrderModel.objects.create(
-    #         book=book, store=book.store, customer=request.user, seller=book.store.user
-    #     )
-    #     return redirect("app_book:order_list")
-    
+
     return render(request, "dashboard/search_details.html", context)
-
-
 
 
 @login_required(login_url="app_book:login")
@@ -650,11 +653,11 @@ def stores_map_view(request):
             if store.location:
                 store_location_coords = tuple(map(float, store.location.split(",")))
                 folium.Marker(
-                location=store_location_coords,
-                tooltip="Click me!",
-                popup=store.name,
-                icon=folium.Icon(icon="store", color="blue" , prefix="fa"),).add_to(m)
-
+                    location=store_location_coords,
+                    tooltip="Click me!",
+                    popup=store.name,
+                    icon=folium.Icon(icon="store", color="blue", prefix="fa"),
+                ).add_to(m)
 
         folium.Marker(
             location=user_location_coords,
@@ -663,17 +666,15 @@ def stores_map_view(request):
             icon=folium.Icon(icon="user", color="red", prefix="fa"),
         ).add_to(m)
 
-    
         context = {
             "map": m._repr_html_(),
         }
     else:
-        context ={
+        context = {
             "map": None,
         }
 
     return render(request, "dashboard/map_view.html", context)
-
 
 
 def custom_page_not_found_view(request, exception=None):

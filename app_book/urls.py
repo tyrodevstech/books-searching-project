@@ -83,10 +83,15 @@ urlpatterns = [
         OrderDetailsView.as_view(),
         name="order_details",
     ),
-     path(
+    path(
         "order/checkout/<int:pk>",
         CheckoutView.as_view(),
         name="checkout",
+    ),
+     path(
+        "order/payment/<int:pk>",
+        PaymentView.as_view(),
+        name="payment",
     ),
     path(
         "order/edit/<int:pk>/",
@@ -99,11 +104,6 @@ urlpatterns = [
         name="order_delete",
     ),
     path(
-        "payment/",
-        PaymentView.as_view(),
-        name="payment",
-    ),
-    path(
         "",
         Home.as_view(),
         name="home",
@@ -112,7 +112,6 @@ urlpatterns = [
     path("stores-map/", stores_map_view, name="stores-map"),
     path("review/add/", AddReview.as_view(), name="review"),
     path("contact/", ContactView.as_view(), name="contact"),
-    path("checkout/", checkout_view, name="checkout"),
 ]
 
 

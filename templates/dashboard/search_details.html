@@ -82,7 +82,7 @@
 
             <form class="flex items-center" action="{% url 'app_book:checkout' book.id %}" method="GET">
                 <div class="flex items-center gap-2 mt-4">
-                    <input type="number" name="quantity" id="" class="!w-max" placeholder="Add Book Quantity" required>
+                    <input type="number" name="quantity" min="1" max="1000" id="" class="!w-max" placeholder="Quantity" required>
                     <button type="submit"
                         class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         <svg xmlns="http://www.w3.org/2000/svg"
