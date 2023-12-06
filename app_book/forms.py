@@ -244,9 +244,19 @@ class BookForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = OrderModel
-        fields = ["order_status", "books_quantity", "billing_address", "billing_email", "billing_phone"]
+        fields = ["billing_address", "billing_email", "billing_phone"]
 
-        # "book", "store", "customer", "seller",
+        widgets = {
+            "billing_address": forms.TextInput(
+                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5", "placeholder": "address", "required": "required"}
+            ),
+            "billing_email": forms.EmailInput(
+                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5", "placeholder": "example@gmail.com", "type": "email", "required": "required"}
+            ),
+            "billing_phone": forms.TextInput(
+                attrs={"class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5", "placeholder": "XXX XXXX XXXXXX", "required": "required"}
+            ),
+        }
 
 
 

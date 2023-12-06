@@ -473,18 +473,58 @@ class OrderListView(OrderBaseView, ListView):
             return queryset
 
 
-class OrderCreateView(FormView):
-    template_name = "dashboard/order/create.html"
+class CheckoutView(FormView):
+    template_name = "dashboard/checkout.html"
     model = OrderModel
-    success_url = reverse_lazy("app_book:order_list")
+    success_url = reverse_lazy("app_book:dashboard")
     form_class = OrderForm
+
+    def form_valid(self, form):
+        order = form.save(commit=False)
+
+        quantity = self.get_context_data().get('quantity')
+        book = self.get_context_data().get('book')
+
+        order.book = book
+        order.store = book.store
+        order.customer = self.request.user
+        order.seller = book.store.user
+        order.books_quantity = quantity
+        order.is_paid = True
+
+        order.save()
+
+        messages.success(self.request, "Order placed successfully !")
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         book_id = self.kwargs.get('pk')
         context = super().get_context_data(**kwargs)
-        context["book_obj"] = get_object_or_404(BookModel, id=book_id)
+        quantity = int(self.request.GET.get('quantity', 1))
+        book = get_object_or_404(BookModel, id=book_id)
+        context["book"] = book
+        context["quantity"] = quantity
+        context["price"] = book.price
+        context["sub_total_price"] = (book.price * quantity)
+        context["total_price"] = (book.price * quantity) + 70
         return context
-    
+
+
+
+class OrderDetailsView(OrderBaseView, DetailView):
+    template_name = "dashboard/order/details.html"
+    context_object_name = "order_obj"
+
+    def get_context_data(self, **kwargs):
+        order_id = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
+        order = get_object_or_404(OrderModel, id=order_id)
+
+        context["sub_total_price"] = (order.book.price * order.books_quantity)
+        context["total_price"] = (order.book.price * order.books_quantity) + 70
+        return context
+
+
 
 class PaymentView(FormView):
     template_name = "dashboard/payment.html"
