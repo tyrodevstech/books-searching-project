@@ -1,5 +1,5 @@
-{% extends 'home/base_home.html' %} 
-{% load static %} 
+{% extends 'home/base_home.html' %}
+{% load static %}
 {% block title %}Home | {% endblock title %}
 
 {% block main_content %}
@@ -12,10 +12,12 @@
     <div class="container ">
       <div class="heading_container heading_center">
         <h2>
-          Books Categories
+          Popular Books Categories
         </h2>
         <p>
-          There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+          Step into the unknown, where the words on our pages carry you to places you've never been. Our bookstore is a
+          haven for dreamers, explorers, and those who believe in the magic of literature. Unleashing worlds on every
+          page, your literary escape awaits, one book at a time!
         </p>
       </div>
       <div class="row">
@@ -29,9 +31,8 @@
                 Textbooks
               </h5>
               <p>
-                fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                The
-                point of using
+                Dive into the extraordinary—where every book is a gateway to uncharted realms, and every page turned
+                reveals a world waiting to be explored. Your journey begins here, one book at a time!
               </p>
             </div>
           </div>
@@ -46,9 +47,8 @@
                 Science
               </h5>
               <p>
-                fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                The
-                point of using
+                Dive into the extraordinary—where every book is a gateway to uncharted realms, and every page turned
+                reveals a world waiting to be explored. Your journey begins here, one book at a time!
               </p>
             </div>
           </div>
@@ -63,9 +63,8 @@
                 History
               </h5>
               <p>
-                fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                The
-                point of using
+                Dive into the extraordinary—where every book is a gateway to uncharted realms, and every page turned
+                reveals a world waiting to be explored. Your journey begins here, one book at a time!
               </p>
             </div>
           </div>
@@ -80,9 +79,8 @@
                 Biography
               </h5>
               <p>
-                fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                The
-                point of using
+                Dive into the extraordinary—where every book is a gateway to uncharted realms, and every page turned
+                reveals a world waiting to be explored. Your journey begins here, one book at a time!
               </p>
             </div>
           </div>
@@ -97,9 +95,8 @@
                 Adventure
               </h5>
               <p>
-                fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                The
-                point of using
+                Dive into the extraordinary—where every book is a gateway to uncharted realms, and every page turned
+                reveals a world waiting to be explored. Your journey begins here, one book at a time!
               </p>
             </div>
           </div>
@@ -114,9 +111,8 @@
                 Fantasy
               </h5>
               <p>
-                fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                The
-                point of using
+                Dive into the extraordinary—where every book is a gateway to uncharted realms, and every page turned
+                reveals a world waiting to be explored. Your journey begins here, one book at a time!
               </p>
             </div>
           </div>
@@ -142,11 +138,15 @@
         <div class="detail-box">
           <div class="heading_container">
             <h2>
-              About Our Bookstore
+              About Us
             </h2>
           </div>
           <p>
-            At cumque tenetur iste molestiae, vel eum reiciendis assumenda! Numquam, repudiandae. Consequuntur obcaecati recusandae aliquam, amet doloribus eius dolores officiis cumque? Quibusdam praesentium pariatur sapiente mollitia, amet hic iusto voluptas! Iusto quo earum vitae excepturi, ipsam aliquid deleniti assumenda culpa deserunt.
+            Discover your next favorite book effortlessly with our Nearest Book Shop Searching Application. Seamlessly
+            connecting literary enthusiasts with nearby bookstores, our user-friendly app employs real-time location
+            tracking and a comprehensive database. Whether you're in search of rare gems, bestsellers, or niche genres,
+            our application ensures swift guidance to your ideal reading destination. Embark on a refined journey of
+            literary exploration – your next great read is just a tap away!
           </p>
           <a href="">
             Read More
@@ -184,7 +184,9 @@
           </div>
           <div class="client_id">
             <div class="img-box">
-              <img src="{% if review.user.image %}{{ review.user.image.url }}{% else %}{% static 'images/p.png' %}{% endif %}" alt="profile-img" style="aspect-ratio: 1/1;object-fit: cover;">
+              <img
+                src="{% if review.user.image %}{{ review.user.image.url }}{% else %}{% static 'images/p.png' %}{% endif %}"
+                alt="profile-img" style="aspect-ratio: 1/1;object-fit: cover;">
             </div>
             <div class="client_name">
               <h5>
@@ -205,7 +207,7 @@
         </h5>
         <hr>
       </div>
-      {% endif %}  
+      {% endif %}
     </div>
   </div>
 </section>
@@ -224,17 +226,18 @@
     <div class="row">
       {% if blogs %}
       {% for blog in blogs %}
-      <div class="col-md-4">
-        <div class="box">
+      <div class="col-md-4" style="display: flex;">
+        <div class="box" style="display: flex; flex-direction: column;">
           <div class="img-box">
-            <img src="{% if blog.banner %}{{ blog.banner.url }}{% else %}{% static 'images/b1.jpg' %}{% endif %}" alt="">
+            <img src="{% if blog.banner %}{{ blog.banner.url }}{% else %}{% static 'images/b1.jpg' %}{% endif %}"
+              alt="">
             <h4 class="blog_date">
               <span>
                 {{ blog.created_at|date:"d M, Y" }}
               </span>
             </h4>
           </div>
-          <div class="detail-box">
+          <div class="detail-box" style="flex: 1;">
             <h5>
               {{ blog.title }}
             </h5>
@@ -288,7 +291,7 @@
           </div>
           <div class="btn-box">
             <button>
-              SEND
+              Please Contact with Us
             </button>
           </div>
       </div>
