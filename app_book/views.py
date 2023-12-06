@@ -399,6 +399,16 @@ def store_view(request):
     return render(request, "dashboard/store.html", context)
 
 
+
+
+def checkout_view(request):
+    book = get_object_or_404(BookModel, id=9)
+    context = {
+        'book':book
+    }
+    return render(request, "dashboard/checkout.html",context)
+
+
 @method_decorator(user_decorators, name="dispatch")
 class AddReview(CreateView):
     model = ReviewModel
