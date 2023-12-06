@@ -487,7 +487,7 @@ class OrderCreateView(FormView):
     
 
 class PaymentView(FormView):
-    template_name = "dashboard/payment/payment.html"
+    template_name = "dashboard/payment.html"
     model = PaymentModel
     success_url = reverse_lazy("app_book:dashboard")
     form_class = PaymentForm

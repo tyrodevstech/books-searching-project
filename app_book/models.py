@@ -110,7 +110,7 @@ class BookModel(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="store_set",
+        related_name="book_set",
     )
     title = models.CharField(max_length=225, null=True, blank=True)
     description = models.TextField(max_length=925, null=True, blank=True)
@@ -122,7 +122,7 @@ class BookModel(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="author_set",
+        related_name="book_set",
     )
     publisher = models.ForeignKey(
         PublisherModel, on_delete=models.SET_NULL, null=True, blank=True
@@ -132,7 +132,7 @@ class BookModel(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="category_set",
+        related_name="book_set",
     )
     publication_date = models.DateField(default=timezone.now)
     price = models.FloatField(null=True, blank=True)

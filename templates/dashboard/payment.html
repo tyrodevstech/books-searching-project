@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Redirect</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+        integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #4a90e2;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-slate-50">
+    <div class="bg-white p-8 rounded shadow-md text-center">
+        <div id="paymentStatus" class="flex justify-center items-center gap-3 text-xl mb-3">
+            <span id="loadingIcon" class="loading-spinner inline-block"></span>
+            <span id="paymentText" class="text-gray-700">Processing payment...</span>
+            <i id="successIcon" class="hidden text-2xl text-green-500 fas fa-check-circle"></i>
+        </div>
+        <div id="waitingText" class="text-gray-700">Wait for a moment.</div>
+        <div id="countdown" class="text-gray-600 hidden">Redirecting in <span id="timer" class="font-bold">5</span>
+            seconds...</div>
+    </div>
+
+    <script>
+        const paymentDuration = 3000; // Simulated payment duration in milliseconds
+        const redirectDuration = 5000; // Redirect countdown duration in milliseconds
+
+        function simulatePayment() {
+            setTimeout(() => {
+                document.getElementById('loadingIcon').style.display = 'none';
+                document.getElementById('paymentText').innerText = 'Payment complete!';
+                document.getElementById('successIcon').classList.remove('hidden');
+                document.getElementById('waitingText').style.display = 'none';
+                startRedirectCountdown();
+            }, paymentDuration);
+        }
+
+        function startRedirectCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            let countdownValue = Math.ceil(redirectDuration / 1000);
+
+            function updateCountdown() {
+                document.getElementById('timer').innerText = countdownValue;
+                countdownValue--;
+                if (countdownValue < 0) {
+                    // window.location.href = 'dashboard.html';
+                } else {
+                    setTimeout(updateCountdown, 1000);
+                }
+            }
+
+            countdownElement.classList.remove('hidden');
+            updateCountdown();
+        }
+
+        simulatePayment();
+    </script>
+</body>
+
+</html>
