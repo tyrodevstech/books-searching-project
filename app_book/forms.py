@@ -13,6 +13,7 @@ from app_book.models import (
     AuthorModel,
     PublisherModel,
     OrderModel,
+    PaymentModel,
 )
 from django.utils.translation import gettext_lazy as _
 
@@ -243,7 +244,17 @@ class BookForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = OrderModel
-        fields = ["order_status", "is_paid", "book"]
+        fields = ["order_status", "books_quantity", "billing_address", "billing_email", "billing_phone"]
+
+        # "book", "store", "customer", "seller",
+
+
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = PaymentModel
+        fields = ["amount_paid", "payment_method", "transaction_id"]
+
 
 
 class BookCategoryForm(forms.ModelForm):

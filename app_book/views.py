@@ -29,6 +29,7 @@ from app_book.forms import (
     BookPublisherForm,
     ContactForm,
     OrderForm,
+    PaymentForm,
     ReviewForm,
     StoreForm,
     UserRegistrationForm,
@@ -41,6 +42,7 @@ from app_book.models import (
     BookModel,
     ContactModel,
     OrderModel,
+    PaymentModel,
     PublisherModel,
     ReviewModel,
     StoreModel,
@@ -459,6 +461,27 @@ class OrderListView(OrderBaseView, ListView):
                 return queryset.filter(customer=self.request.user)
         else:
             return queryset
+
+
+class OrderCreateView(FormView):
+    template_name = "dashboard/order/create.html"
+    model = OrderModel
+    success_url = reverse_lazy("app_book:order_list")
+    form_class = OrderForm
+
+    def get_context_data(self, **kwargs):
+        book_id = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
+        context["book_obj"] = get_object_or_404(BookModel, id=book_id)
+        return context
+    
+
+class PaymentView(FormView):
+    template_name = "dashboard/payment/payment.html"
+    model = PaymentModel
+    success_url = reverse_lazy("app_book:dashboard")
+    form_class = PaymentForm
+
 
 
 @method_decorator(seller_decorators, name="dispatch")

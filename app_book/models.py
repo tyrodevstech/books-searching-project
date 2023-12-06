@@ -59,6 +59,8 @@ class StoreModel(models.Model):
         verbose_name = "Store"
         verbose_name_plural = "Stores"
 
+        ordering = ["-id"]
+
     def __str__(self):
         return f"{self.name}"
 
@@ -70,6 +72,8 @@ class AuthorModel(models.Model):
         verbose_name = "Author"
         verbose_name_plural = "Authors"
 
+        ordering = ["-id"]
+
     def __str__(self):
         return f"{self.author_name}"
 
@@ -80,6 +84,8 @@ class PublisherModel(models.Model):
     class Meta:
         verbose_name = "Publisher"
         verbose_name_plural = "Publishers"
+
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.publisher_name}"
@@ -135,6 +141,8 @@ class BookModel(models.Model):
     class Meta:
         verbose_name = "Book"
         verbose_name_plural = "Books"
+
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.title}"
@@ -202,6 +210,7 @@ class OrderModel(models.Model):
         blank=True,
         related_name="seller_orders",
     )
+    books_quantity = models.PositiveIntegerField(default=1, null=True)
 
     billing_address = models.TextField(blank=True, null=True)
     billing_email = models.EmailField(blank=True, null=True)
