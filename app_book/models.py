@@ -59,6 +59,8 @@ class StoreModel(models.Model):
         verbose_name = "Store"
         verbose_name_plural = "Stores"
 
+        ordering = ["-id"]
+
     def __str__(self):
         return f"{self.name}"
 
@@ -70,6 +72,8 @@ class AuthorModel(models.Model):
         verbose_name = "Author"
         verbose_name_plural = "Authors"
 
+        ordering = ["-id"]
+
     def __str__(self):
         return f"{self.author_name}"
 
@@ -80,6 +84,8 @@ class PublisherModel(models.Model):
     class Meta:
         verbose_name = "Publisher"
         verbose_name_plural = "Publishers"
+
+        ordering = ["-id"]
 
     def __str__(self):
         return f"{self.publisher_name}"
@@ -136,16 +142,51 @@ class BookModel(models.Model):
         verbose_name = "Book"
         verbose_name_plural = "Books"
 
+        ordering = ["-id"]
+
     def __str__(self):
         return f"{self.title}"
 
 
+
+class PaymentModel(models.Model):
+    PAYMENT_METHOD_CHOICES = [
+        ("Credit Card", "Credit Card"),
+        ("PayPal", "PayPal"),
+        ("Visa Card", "Visa Card"),
+        ("Master Card", "Master Card"),
+        ("Bkash", "Bkash"),
+        ("Nagad", "Nagad"),
+        # Add other payment methods as needed
+    ]
+
+    order = models.OneToOneField(
+        "OrderModel", on_delete=models.CASCADE, related_name="payment"
+    )
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(
+        max_length=100, choices=PAYMENT_METHOD_CHOICES, null=True, blank=True
+    )
+    transaction_id = models.CharField(max_length=100, null=True, blank=True)
+    payment_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Payment"
+        verbose_name_plural = "Payments"
+        ordering = ["-id"]
+
+    def __str__(self):
+        return f"Payment for Order #{self.order.id}"
+    
+
+
 class OrderModel(models.Model):
-    ORDER_STATUS = (
+    ORDER_STATUS = [
         ("Pending", "Pending"),
         ("Complete", "Complete"),
         ("Cancelled", "Cancelled"),
-    )
+    ]
+
     customer = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -154,16 +195,14 @@ class OrderModel(models.Model):
         related_name="customer_orders",
     )
     order_status = models.CharField(
-        max_length=122, choices=ORDER_STATUS, null=True, default=ORDER_STATUS[0][0]
+        max_length=122, choices=ORDER_STATUS, default="Pending"
     )
     book = models.ForeignKey(
-        BookModel, on_delete=models.SET_NULL, null=True, blank=True
+        "BookModel", on_delete=models.CASCADE, null=True, blank=True
     )
     store = models.ForeignKey(
-        StoreModel, on_delete=models.SET_NULL, null=True, blank=True
+        "StoreModel", on_delete=models.CASCADE, null=True, blank=True
     )
-    payment_method = models.CharField(max_length=100, null=True, blank=True)
-    transaction_id = models.CharField(max_length=100, null=True, blank=True)
     seller = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -171,17 +210,27 @@ class OrderModel(models.Model):
         blank=True,
         related_name="seller_orders",
     )
+    books_quantity = models.PositiveIntegerField(default=1, null=True)
+
+    billing_address = models.TextField(blank=True, null=True)
+    billing_email = models.EmailField(blank=True, null=True)
+    billing_phone = models.CharField(max_length=20, blank=True, null=True)
+    
     is_paid = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Order"
         verbose_name_plural = "Orders"
-
         ordering = ["-id"]
 
+        # indexes = [
+        #     models.Index(fields=["order_status", "is_paid"]),
+        #     # Add more indexes based on common query patterns
+        # ]
+
     def __str__(self):
-        return f"Order-#{self.id}"
+        return f"Order #{self.id}"
 
 
 class ContactModel(models.Model):

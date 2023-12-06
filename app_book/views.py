@@ -1,5 +1,6 @@
 import random
 import folium
+import folium.plugins as plugs
 
 from django.conf import settings
 from django.contrib import messages
@@ -18,6 +19,7 @@ from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateVi
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
+from geopy.distance import geodesic
 
 from app_book.decorators import user_decorator, seller_decorator
 from app_book.forms import (
@@ -27,6 +29,7 @@ from app_book.forms import (
     BookPublisherForm,
     ContactForm,
     OrderForm,
+    PaymentForm,
     ReviewForm,
     StoreForm,
     UserRegistrationForm,
@@ -39,6 +42,7 @@ from app_book.models import (
     BookModel,
     ContactModel,
     OrderModel,
+    PaymentModel,
     PublisherModel,
     ReviewModel,
     StoreModel,
@@ -469,6 +473,27 @@ class OrderListView(OrderBaseView, ListView):
             return queryset
 
 
+class OrderCreateView(FormView):
+    template_name = "dashboard/order/create.html"
+    model = OrderModel
+    success_url = reverse_lazy("app_book:order_list")
+    form_class = OrderForm
+
+    def get_context_data(self, **kwargs):
+        book_id = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
+        context["book_obj"] = get_object_or_404(BookModel, id=book_id)
+        return context
+    
+
+class PaymentView(FormView):
+    template_name = "dashboard/payment/payment.html"
+    model = PaymentModel
+    success_url = reverse_lazy("app_book:dashboard")
+    form_class = PaymentForm
+
+
+
 @method_decorator(seller_decorators, name="dispatch")
 class OrderUpdateView(OrderBaseView, UpdateView):
     template_name = "dashboard/order/edit.html"
@@ -522,36 +547,48 @@ def search_details_view(request, pk):
         store_location_coords = tuple(map(float, store_location.split(",")))
 
 
-    m = folium.Map(user_location_coords, zoom_start=11)
+        m = folium.Map(user_location_coords, zoom_start=11)
 
-    folium.Marker(
-        location=user_location_coords,
-        tooltip="Click me!",
-        popup="Me",
-        icon=folium.Icon(icon="user", color="red", prefix="fa"),
-    ).add_to(m)
+        folium.Marker(
+            location=user_location_coords,
+            tooltip="Click me!",
+            popup="Me",
+            icon=folium.Icon(icon="user", color="red", prefix="fa"),
+        ).add_to(m)
 
-    folium.Marker(
-        location=store_location_coords,
-        tooltip="Click me!",
-        popup=book.store.name,
-        icon=folium.Icon(icon="store", color="blue" , prefix="fa"),
-    ).add_to(m)
+        folium.Marker(
+            location=store_location_coords,
+            tooltip="Click me!",
+            popup=book.store.name,
+            icon=folium.Icon(icon="store", color="blue" , prefix="fa"),
+        ).add_to(m)
 
-    folium.PolyLine([user_location_coords, store_location_coords], tooltip="Distance").add_to(m)
-
-    
-    if request.method == "POST":
-        order = OrderModel.objects.create(
-            book=book, store=book.store, customer=request.user, seller=book.store.user
+        distance = round(
+                    geodesic(user_location_coords, store_location_coords).kilometers, 2
         )
-        return redirect("app_book:order_list")
+
+        line = folium.PolyLine([store_location_coords, user_location_coords], weight=5, tooltip=f"Distance: {distance}km").add_to(m)
+        attr = {'fill': '#111222', 'font-weight': 'bold', 'font-size': '20'}
+        wind_textpath = plugs.PolyLineTextPath(line, f"{distance}km", center=True, offset=24, attributes=attr)
+        m.add_child(line)
+        m.add_child(wind_textpath)
     
 
-    context = {
-        "book": book,
-        "map": m._repr_html_(),
-    }
+        context = {
+            "book": book,
+            "map": m._repr_html_(),
+        }
+    else:
+        context = {
+            "book": book,
+            "map": None,
+        }
+    
+    # if request.method == "POST":
+    #     order = OrderModel.objects.create(
+    #         book=book, store=book.store, customer=request.user, seller=book.store.user
+    #     )
+    #     return redirect("app_book:order_list")
     
     return render(request, "dashboard/search_details.html", context)
 

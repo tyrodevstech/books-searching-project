@@ -83,8 +83,8 @@
             <form class="flex items-center" method="post">
                 {% csrf_token %}
                 <div>
-                    <label  for="quantity">Quantity</label>
-                <input type="number" name="quantity" id="" class="!w-max" placeholder="Quantity">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity" id="" class="!w-max" placeholder="Quantity">
                 </div>
                 <button type="submit" onclick="return confirm('Are you sure?')"
                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -99,16 +99,20 @@
                         <path d="M6 5l14 1l-1 7h-13"></path>
                     </svg>
                     Order Now
-                </button>
-            </form>
+                    </a>
         </div>
+    </div>
     </div>
 
     <div class="map max-w-5xl mx-auto mt-8 py-6">
         <h2 class="mb-4 text-xl font-semibold leading-none text-gray-900 md:text-2xl dark:text-white">
             Map View Between Shop Owner and Customer -
         </h2>
+        {% if map %}
         {{ map|safe }}
+        {% else %}
+        <p class="text-red-600 text-base"> -- User location coordinates error!</p>
+        {% endif %}
     </div>
 </section>
 {% endif %}
