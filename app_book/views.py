@@ -118,11 +118,10 @@ def registration_view(request):
             recipient_list = [
                 new_form.email,
             ]
-
-            # try:
-            #     send_mail("OTP From Test System", message, email_from, recipient_list)
-            # except:
-            #     print("Email is not valid!")
+            try:
+                send_mail("OTP From Test System", message, email_from, recipient_list)
+            except:
+                print("Email is not valid!")
 
             messages.success(request, "Account Created successfully !")
             return redirect("app_book:registration")
