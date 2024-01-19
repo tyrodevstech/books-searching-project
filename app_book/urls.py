@@ -116,7 +116,9 @@ urlpatterns = [
 
 
 htmx_urlpatters = [
-    path("hx-search-list", search_list_view, name="hx_search_list"),
+    path("hx-book-search-list", book_search_list_view, name="hx_book_search_list"),
+    path("hx-available-store-list", available_store_list_view, name="hx_available_store_list"),
+    path("hx-available-book-stores-map", available_book_stores_map_view, name="hx_available_stores_map"),
     path("search-details/<int:pk>", search_details_view, name="search_details"),
 ]
 urlpatterns += htmx_urlpatters

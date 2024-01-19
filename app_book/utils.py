@@ -55,10 +55,12 @@ def getSortedBooksLocations(user_location, book_qs):
                     "title": book.title,
                     "author": book.author.author_name,
                     "category": book.category.category_name,
+                    "store_id": book.store.id,
                     "store_name": book.store.name,
                     "store_phone": book.store.phone,
                     "store_street": book.store.street,
                     "store_city": book.store.city,
+                    "store_location": book.store.location,
                     "distance": distance,
                 }
             )

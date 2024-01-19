@@ -151,7 +151,39 @@ def dashboard_view(request):
         return render(request, "dashboard/comfirm_account.html")
     else:
         if request.user.role == "User":
-            return render(request, "dashboard/user_dashboard.html")
+            store_qs = StoreModel.objects.all()
+            user_location = request.GET.get("user_location")
+
+            if user_location:
+                user_location_coords = tuple(map(float, user_location.split(",")))
+
+                m = folium.Map(user_location_coords, zoom_start=11)
+
+                # for store in store_qs:
+                #     if store.location:
+                #         store_location_coords = tuple(map(float, store.location.split(",")))
+                #         folium.Marker(
+                #             location=store_location_coords,
+                #             tooltip="Click me!",
+                #             popup=store.name,
+                #             icon=folium.Icon(icon="store", color="blue", prefix="fa"),
+                #         ).add_to(m)
+
+                folium.Marker(
+                    location=user_location_coords,
+                    tooltip="Click me!",
+                    popup="Me",
+                    icon=folium.Icon(icon="user", color="red", prefix="fa"),
+                ).add_to(m)
+
+                context = {
+                    "map": m._repr_html_(),
+                }
+            else:
+                context = {
+                    "map": None,
+                }
+            return render(request, "dashboard/user_dashboard.html", context)
         else:
             total_review = ReviewModel.objects.all().count()
             total_added_books = BookModel.objects.filter(
@@ -556,27 +588,50 @@ class OrderDeleteView(OrderBaseView, DeleteView):
     template_name = "dashboard/order/delete.html"
 
 
+from django.db.models import Count
+
+
 @login_required(login_url="app_book:login")
 @user_decorator
-def search_list_view(request):
+def book_search_list_view(request):
     search_text = request.POST.get("query")
-    user_location = request.POST.get("location")
 
     if search_text:
-        results = BookModel.objects.filter(
-            Q(title__icontains=search_text)
-            | Q(author__author_name__icontains=search_text)
-            | Q(publisher__publisher_name__icontains=search_text)
-            | Q(category__category_name__icontains=search_text)
-        ).select_related("store", "author")[:10]
-        # Sort results based on user location
-        sorted_books = getSortedBooksLocations(user_location, results)
+        results = (
+            BookModel.objects.filter(
+                Q(title__icontains=search_text)
+                | Q(author__author_name__icontains=search_text)
+                | Q(publisher__publisher_name__icontains=search_text)
+                | Q(category__category_name__icontains=search_text)
+            )
+            .select_related("store", "author")
+            .values("title", "author__author_name", "category__category_name")
+            .annotate(count=Count("title"))
+            .order_by("title")[:12]
+        )
+        context = {
+            "searched_books": results,
+        }
+        return render(request, "partials/book-search-results.html", context)
+    else:
+        return HttpResponse("")
+
+
+@login_required(login_url="app_book:login")
+@user_decorator
+def available_store_list_view(request):
+    book_title = request.POST.get("title")
+    user_location = request.POST.get("location")
+
+    if book_title:
+        book_qs = BookModel.objects.filter(title__icontains=book_title)[:10]
+        sorted_books = getSortedBooksLocations(user_location, book_qs)
 
         context = {
             "sorted_books": sorted_books,
             "user_location": user_location,
         }
-        return render(request, "partials/search_list.html", context)
+        return render(request, "partials/available-book-stores.html", context)
     else:
         return HttpResponse("")
 
@@ -603,7 +658,6 @@ def search_details_view(request, pk):
 
         folium.Marker(
             location=store_location_coords,
-            tooltip="Click me!",
             popup=book.store.name,
             icon=folium.Icon(icon="store", color="blue", prefix="fa"),
         ).add_to(m)
@@ -614,12 +668,12 @@ def search_details_view(request, pk):
 
         line = folium.PolyLine(
             [store_location_coords, user_location_coords],
-            weight=5,
+            weight=3,
             tooltip=f"Distance: {distance}km",
         ).add_to(m)
-        attr = {"fill": "#111222", "font-weight": "bold", "font-size": "20"}
+        attr = {"fill": "#000", "font-weight": "bold", "font-size": "14"}
         wind_textpath = plugs.PolyLineTextPath(
-            line, f"{distance}km", center=True, offset=24, attributes=attr
+            line, f"{distance}km", center=True, offset=20, attributes=attr
         )
         m.add_child(line)
         m.add_child(wind_textpath)
@@ -674,6 +728,58 @@ def stores_map_view(request):
         }
 
     return render(request, "dashboard/map_view.html", context)
+
+
+@login_required(login_url="app_book:login")
+@user_decorator
+def available_book_stores_map_view(request):
+    book_title = request.POST.get("title")
+    user_location = request.POST.get("location")
+    if book_title and user_location:
+        book_qs = BookModel.objects.filter(title__icontains=book_title)[:12]
+        sorted_book_stores = getSortedBooksLocations(user_location, book_qs)
+
+        user_location_coords = tuple(map(float, user_location.split(",")))
+
+        m = folium.Map(user_location_coords, zoom_start=11)
+        if sorted_book_stores:
+            for store in sorted_book_stores:
+                if store["store_location"]:
+                    store_location_coords = tuple(
+                        map(float, store["store_location"].split(","))
+                    )
+                    folium.Marker(
+                        location=store_location_coords,
+                        tooltip="Click me!",
+                        popup=store["store_name"],
+                        icon=folium.Icon(icon="store", color="blue", prefix="fa"),
+                    ).add_to(m)
+                    line = folium.PolyLine(
+                        [store_location_coords, user_location_coords],
+                        weight=3,
+                        tooltip=f"Distance: {store['distance']}km",
+                    ).add_to(m)
+                    attr = {"fill": "#000", "font-weight": "bold", "font-size": "14"}
+                    wind_textpath = plugs.PolyLineTextPath(
+                        line,
+                        f"{store['distance']}km",
+                        center=True,
+                        offset=20,
+                        attributes=attr,
+                    )
+                    m.add_child(line)
+                    m.add_child(wind_textpath)
+
+        folium.Marker(
+            location=user_location_coords,
+            tooltip="Click me!",
+            popup="Me",
+            icon=folium.Icon(icon="user", color="red", prefix="fa"),
+        ).add_to(m)
+
+        return HttpResponse(m._repr_html_())
+    else:
+        return HttpResponse("")
 
 
 def custom_page_not_found_view(request, exception=None):

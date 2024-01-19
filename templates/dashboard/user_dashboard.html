@@ -4,60 +4,67 @@
 
 
 {% block main_content %}
-<section class="relative overflow-y-auto p-4 md:p-6 min-h-full mb-4">
-   <div class="max-w-5xl mx-auto h-full pt-8 md:pt-12">
-      <div class="text-center mb-8 md:mb-12">
-         <h2 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white">What are you looking for?</h2>
-         <p class="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto font-semibold">“Books are the quietest and most
-            constant of friends; they are the
-            most accessible and wisest of counselors,
-            and the most patient of teachers.” ― Charles W.</p>
-      </div>
-      <form class="flex items-center">
-         <label for="voice-search" class="sr-only">Search</label>
-         <div class="relative w-full">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-               <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                     clip-rule="evenodd"></path>
-               </svg>
+<section class="relative h-full overflow-y-auto p-4 sm:p-6 mb-4">
+   <div class="flex flex-col lg:flex-row gap-6 h-full">
+      <div class="w-full lg:max-w-md mx-auto">
+         <div class="text-center mb-6 md:mb-10">
+            <h2 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white">What are you looking for?</h2>
+            <p class="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-sm md:text-base">Search Books by Title,
+               Author,
+               Publisher and select the book for view available stores.</p>
+         </div>
+         <div class="flex items-center">
+            <label for="voice-search" class="sr-only">Search</label>
+            <div class="relative w-full">
+               <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" viewBox="0 0 24 24">
+                     <path
+                        d="M11 2C15.968 2 20 6.032 20 11C20 15.968 15.968 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2ZM11 18C14.8675 18 18 14.8675 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18ZM19.4853 18.0711L22.3137 20.8995L20.8995 22.3137L18.0711 19.4853L19.4853 18.0711Z"
+                        fill="currentColor"></path>
+                  </svg>
+               </div>
+               <input name="query" type="text" id="voice-search" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                  hx-target="#book-search-results" hx-post="{% url 'app_book:hx_book_search_list' %}"
+                  hx-trigger="keyup changed delay:500ms"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block w-full !px-10 p-2.5"
+                  placeholder="Search Books..." required>
+               <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg aria-hidden="true"
+                     class="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                     <path fill-rule="evenodd"
+                        d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
+                        clip-rule="evenodd"></path>
+                  </svg>
+               </button>
             </div>
-            <input name="query" type="text" id="voice-search" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-               hx-target="#search-results" hx-post="{% url 'app_book:hx_search_list' %}"
-               hx-trigger="keyup changed delay:500ms" hx-vals='js:{"location": getUserLocation()}'
-               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full !pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-               placeholder="Search Books by Title, Author, Publisher..." required>
-            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3">
-               <svg aria-hidden="true"
-                  class="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                  fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                     d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z"
-                     clip-rule="evenodd"></path>
-               </svg>
+         </div>
+         <div id="book-search-results"></div>
+         <div id="selected-book-container" class="mt-4 hidden overflow-hidden rounded-sm">
+            <span class="border w-full"></span>
+            <button type="submit" id="view-on-map"
+               class="inline-flex whitespace-nowrap items-center p-2 text-xs font-medium text-white bg-blue-700 hover:bg-blue-800 ">
+               <i class="ti ti-map-pin mr-1"></i> View on Maps
             </button>
          </div>
-         <button type="submit"
-            class="inline-flex items-center py-2.5 px-3 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            <svg aria-hidden="true" class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-               xmlns="http://www.w3.org/2000/svg">
-               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>Search
-         </button>
-      </form>
-      <div id="search-results"></div>
-      <div class="w-48 mx-auto mt-8 md:mt-12">
-         <img src="{% static 'images/book_search.svg' %}" alt="" srcset="" class="w-full">
+         <div id="available-book-stores"></div>
       </div>
-      <p class="text-gray-400 dark:text-gray-400 max-w-2xl mx-auto text-center">Search your desire books around your
-         nearest location.</p>
+      {% if map %}
+      <div id="map-container" class="h-full w-full">
+         {{ map|safe }}
+      </div>
+      <style>
+         #map-container>div,
+         #map-container>div>div {
+            height: 100% !important;
+            min-height: 50vh;
+         }
+      </style>
+      {% endif %}
    </div>
 </section>
 
-<div class="absolute z-10 inset-0 -top-16 md:-top-14 hidden" id="my-modal">
+<div class="absolute z-50 inset-0 -top-16 md:-top-14 hidden" id="location-denied-modal">
    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 relative">
       <div class="absolute inset-0 transition-opacity" aria-hidden="true">
          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -99,29 +106,81 @@
 
 {% block script %}
 <script>
-   function getlocation() {
-      userLocation = ''
-      if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition((position) => {
-            let lat = position.coords.latitude;
-            let long = position.coords.longitude;
-            userLocation = `${lat},${long}`;
-         }, positionError);
+   let current_url = window.location.href
+   let url = new URL(current_url)
+   let searchParams = new URLSearchParams(url.search)
+   let userLocation = ''
+   let selectedBookTitile = ''
+
+   function waitForGeolocation() {
+      return new Promise((resolve, reject) => {
+         if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+               position => resolve(position),
+               error => {
+                  reject(error)
+               }
+            );
+         } else {
+            reject(new Error('Geolocation not supported.'));
+         }
+      });
+   }
+
+   async function getGeolocation() {
+      try {
+         const position = await waitForGeolocation();
+         let lat = position.coords.latitude;
+         let long = position.coords.longitude;
+         userLocation = `${lat},${long}`;
+      } catch (error) {
+         positionError(error)
+         console.error('Error getting geolocation:', error.message);
       }
    }
+
    function positionError(error) {
-      // if (error.PERMISSION_DENIED) alert("Please accept geolocation")
-      document.getElementById('my-modal').classList.remove('hidden');
+      document.getElementById('location-denied-modal').classList.remove('hidden');
    }
 
    window.addEventListener("DOMContentLoaded", async (event) => {
-      getlocation()
+      await getGeolocation();
+      if (!searchParams.get(`user_location`) && userLocation) {
+         window.location.href = current_url + `?user_location=${userLocation}`;
+      }
    });
 
-   function getUserLocation() { return userLocation }
+   navigator.permissions.query({ name: 'geolocation' }).then(function (permissionStatus) {
+      permissionStatus.onchange = async function () {
+         if (permissionStatus.state == 'granted') {
+            await getGeolocation();
+            if (!searchParams.get(`user_location`) && userLocation) {
+               window.location.href = current_url + `?user_location=${userLocation}`;
+            }
+            console.log('geolocation permission state has changed to', this.state);
+         }
+      };
+   });
 
    function closeModal() {
-      document.getElementById('my-modal').classList.add('hidden');
+      document.getElementById('location-denied-modal').classList.add('hidden');
    }
+</script>
+<script>
+   $(document).on('click', '#book-search-results .search-item', function (e) {
+      if (userLocation) {
+         let selectedBookContainer = $('#selected-book-container')
+         selectedBookContainer.find('span').html($(this).append('<span class="ml-2 text-sm text-green-500 whitespace-nowrap">selected &#10003;</span>'))
+         selectedBookContainer.removeClass('hidden').addClass('flex')
+         $('#book-search-results').empty()
+         selectedBookTitile = $(this).data('book-title')
+         let availableBookStores = $('#available-book-stores')
+         htmx.ajax('POST', '/hx-available-store-list', { target: '#available-book-stores', swap: 'innerHTML', values: { 'title': selectedBookTitile, 'location': userLocation }, 'headers': { "X-CSRFToken": '{{ csrf_token }}' } })
+      } else positionError()
+   })
+
+   $(document).on('click', '#view-on-map', function () {
+      htmx.ajax('POST', '/hx-available-book-stores-map', { target: '#map-container', swap: 'innerHTML', values: { 'title': selectedBookTitile, 'location': userLocation }, 'headers': { "X-CSRFToken": '{{ csrf_token }}' } })
+   })
 </script>
 {% endblock script %}
